@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Beautiful is better than ugly.Explicit is better than implicit.Simple is better than complex.Complex is better than complicated.Flat is better than nested.Sparse is better than dense.Readability count">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python特殊语法笔记">
+<meta property="og:url" content="http://yoursite.com/2017/11/25/python-grammar-notes/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="Beautiful is better than ugly.Explicit is better than implicit.Simple is better than complex.Complex is better than complicated.Flat is better than nested.Sparse is better than dense.Readability count">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-11-25T02:08:20.000Z">
+<meta property="article:modified_time" content="2020-01-13T01:54:31.311Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2017/11/25/python-grammar-notes/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>python特殊语法笔记 | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/25/python-grammar-notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python特殊语法笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-11-25 10:08:20" itemprop="dateCreated datePublished" datetime="2017-11-25T10:08:20+08:00">2017-11-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-13 09:54:31" itemprop="dateModified" datetime="2020-01-13T09:54:31+08:00">2020-01-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Beautiful is better than ugly.<br>Explicit is better than implicit.<br>Simple is better than complex.<br>Complex is better than complicated.<br>Flat is better than nested.<br>Sparse is better than dense.<br>Readability counts.<br>Special cases aren’t special enough to break the rules.<br>Although practicality beats purity.<br>Errors should never pass silently.<br>Unless explicitly silenced.<br>In the face of ambiguity, refuse the temptation to guess.<br>There should be one– and preferably only one –obvious way to do it.<br>Although that way may not be obvious at first unless you’re Dutch.<br>Now is better than never.<br>Although never is often better than <em>right</em> now.<br>If the implementation is hard to explain, it’s a bad idea.<br>If the implementation is easy to explain, it may be a good idea.<br>Namespaces are one honking great idea – let’s do more of those!   </p>
+<p>优美胜于丑陋（Python 以编写优美的代码为目标）<br>明了胜于晦涩（优美的代码应当是明了的，命名规范，风格相似）<br>简洁胜于复杂（优美的代码应当是简洁的，不要有复杂的内部实现）<br>复杂胜于凌乱（如果复杂不可避免，那代码间也不能有难懂的关系，要保持接口简洁）<br>扁平胜于嵌套（优美的代码应当是扁平的，不能有太多的嵌套）<br>间隔胜于紧凑（优美的代码有适当的间隔，不要奢望一行代码解决问题）<br>可读性很重要（优美的代码是可读的）<br>即便假借特例的实用性之名，也不可违背这些规则（这些规则至高无上）<br>不要包容所有错误，除非你确定需要这样做（精准地捕获异常，不写 except:pass 风格的代码）<br>当存在多种可能，不要尝试去猜测<br>而是尽量找一种，最好是唯一一种明显的解决方案（如果不确定，就用穷举法）<br>虽然这并不容易，因为你不是 Python 之父（这里的 Dutch 是指 Guido ）<br>做也许好过不做，但不假思索就动手还不如不做（动手之前要细思量）<br>如果你无法向人描述你的方案，那肯定不是一个好方案；反之亦然（方案测评标准）<br>命名空间是一种绝妙的理念，我们应当多加利用（倡导与号召）   </p>
+<h2 id="数据类型和关键字"><a href="#数据类型和关键字" class="headerlink" title="数据类型和关键字"></a>数据类型和关键字</h2><h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><h4 id="字符串变量的索引"><a href="#字符串变量的索引" class="headerlink" title="字符串变量的索引"></a>字符串变量的索引</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">word &#x3D; &#39;Python&#39;</span><br><span class="line">word[0]  #位置0的字符</span><br><span class="line">&#39;P&#39;</span><br><span class="line">word[5]  #位置5的字符</span><br><span class="line">&#39;n&#39;</span><br><span class="line">word[-1]  #最后一个字符</span><br><span class="line">&#39;n&#39;</span><br><span class="line">word[:2] + word[2:]</span><br><span class="line">&#39;Python&#39;</span><br><span class="line">word[:4] + word[4:]</span><br><span class="line">&#39;Python&#39;</span><br><span class="line">word[:2]   # 从0到字符串2的字符串</span><br><span class="line">&#39;Py&#39;</span><br><span class="line">word[4:]   # 从4到len(word)</span><br><span class="line">&#39;on&#39;</span><br><span class="line">word[-2:]  # 从前往后数第二个到最后end</span><br><span class="line">&#39;on&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="原始字符串-不需反斜杠转义"><a href="#原始字符串-不需反斜杠转义" class="headerlink" title="原始字符串(不需反斜杠转义)"></a>原始字符串(不需反斜杠转义)</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#使用一个r单字符写在变量值之前</span></span><br><span class="line">str = <span class="string">r'D:\soooooooft\python_install'</span></span><br><span class="line">print(str)</span><br><span class="line"><span class="string">'D:\soooooooft\python_install'</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="的应用"><a href="#的应用" class="headerlink" title="_的应用"></a><code>_</code>的应用</h4><blockquote>
+<p> 在交互模式中，最后一个有关打印的表达式的值会赋值给变量<code>_</code></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; tax &#x3D; 12.5 &#x2F; 100</span><br><span class="line">&gt;&gt;&gt; price &#x3D; 100.50</span><br><span class="line">&gt;&gt;&gt; price * tax</span><br><span class="line">12.5625</span><br><span class="line">&gt;&gt;&gt; price + _</span><br><span class="line">113.0625</span><br><span class="line">&gt;&gt;&gt; round(_, 2)</span><br><span class="line">113.06</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="字符串的多行赋值"><a href="#字符串的多行赋值" class="headerlink" title="字符串的多行赋值"></a>字符串的多行赋值</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">print(&quot;&quot;&quot;\    #可测试没有改换行符的情景</span><br><span class="line">Usage: thingy [OPTIONS]</span><br><span class="line">     -h                        Display this usage message</span><br><span class="line">     -H hostname               Hostname to connect to</span><br><span class="line">&quot;&quot;&quot;)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="数字类型"><a href="#数字类型" class="headerlink" title="数字类型"></a>数字类型</h3><h4 id="数字处理"><a href="#数字处理" class="headerlink" title="数字处理"></a>数字处理</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">number_a = <span class="number">5.99</span></span><br><span class="line">number_b = int(a)</span><br><span class="line">print(number_b)   <span class="comment">#输出5</span></span><br><span class="line">print(<span class="number">17</span> // <span class="number">3</span>)  <span class="comment"># 输出5，丢弃小数部分。</span></span><br><span class="line">print(<span class="number">5</span> ** <span class="number">2</span>)   <span class="comment">#5的2次方,25</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="集合类型"><a href="#集合类型" class="headerlink" title="集合类型"></a>集合类型</h3><p>集合类型十分的强大，最常见的就是list类型，和str有很多的共性。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span><br><span class="line">n &#x3D; [1, 2, 3]</span><br><span class="line">x &#x3D; [a, n]</span><br><span class="line">x</span><br><span class="line">[[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;], [1, 2, 3]]</span><br><span class="line">x[0]</span><br><span class="line">[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]</span><br><span class="line">x[0][1]</span><br><span class="line">&#39;b&#39;</span><br></pre></td></tr></table></figure>
+
+<h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><h4 id="end的使用-避免打印新行"><a href="#end的使用-避免打印新行" class="headerlink" title="end的使用 避免打印新行"></a>end的使用 避免打印新行</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a, b = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">while</span> b &lt; <span class="number">1000</span>:</span><br><span class="line"><span class="meta">... </span>    print(b, end=<span class="string">','</span>)</span><br><span class="line"><span class="meta">... </span>    a, b = b, a+b</span><br><span class="line">...</span><br><span class="line"><span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">8</span>,<span class="number">13</span>,<span class="number">21</span>,<span class="number">34</span>,<span class="number">55</span>,<span class="number">89</span>,<span class="number">144</span>,<span class="number">233</span>,<span class="number">377</span>,<span class="number">610</span>,<span class="number">987</span>,</span><br></pre></td></tr></table></figure>
+
+<h2 id="控制流程"><a href="#控制流程" class="headerlink" title="控制流程"></a>控制流程</h2><h3 id="if语句（使用elif代替其他编程语言的else-if，减少冗余的缩进）"><a href="#if语句（使用elif代替其他编程语言的else-if，减少冗余的缩进）" class="headerlink" title="if语句（使用elif代替其他编程语言的else if，减少冗余的缩进）"></a>if语句（使用elif代替其他编程语言的else if，减少冗余的缩进）</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>x = int(input(<span class="string">"Please enter an integer: "</span>))</span><br><span class="line">Please enter an integer: <span class="number">42</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">if</span> x &lt; <span class="number">0</span>:</span><br><span class="line"><span class="meta">... </span>    x = <span class="number">0</span></span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'Negative changed to zero'</span>)</span><br><span class="line"><span class="meta">... </span><span class="keyword">elif</span> x == <span class="number">0</span>:</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'Zero'</span>)</span><br><span class="line"><span class="meta">... </span><span class="keyword">elif</span> x == <span class="number">1</span>:</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'Single'</span>)</span><br><span class="line"><span class="meta">... </span><span class="keyword">else</span>:</span><br><span class="line"><span class="meta">... </span>    print(<span class="string">'More'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h3 id="for语句（只能在子语句中终结循环）"><a href="#for语句（只能在子语句中终结循环）" class="headerlink" title="for语句（只能在子语句中终结循环）"></a>for语句（只能在子语句中终结循环）</h3><p>在遍历子语句中操作这个循环对象，建议使用切片符号进行显示的对象拷贝。比如下面两种情况：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> w <span class="keyword">in</span> words[:]:  <span class="comment"># Loop over a slice copy of the entire list.</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">if</span> len(w) &gt; <span class="number">6</span>:</span><br><span class="line"><span class="meta">... </span>        words.insert(<span class="number">0</span>, w)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>words</span><br><span class="line">[<span class="string">'defenestrate'</span>, <span class="string">'cat'</span>, <span class="string">'window'</span>, <span class="string">'defenestrate'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#如果是下面这种，插入操作将会一直不停的执行。永远不会结束。</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> w <span class="keyword">in</span> words:</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">if</span> len(w) &gt; <span class="number">6</span>:</span><br><span class="line"><span class="meta">... </span>        words.insert(<span class="number">0</span>, w)</span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>words</span><br><span class="line">[<span class="string">'defenestrate'</span>, <span class="string">'cat'</span>, <span class="string">'window'</span>, <span class="string">'defenestrate'</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="range函数"><a href="#range函数" class="headerlink" title="range函数"></a>range函数</h3><p>遍历一个数字类型的序列使用range函数将会很方便，支持等差数的遍历。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">range(<span class="number">5</span>, <span class="number">10</span>)</span><br><span class="line">   <span class="number">5</span> through <span class="number">9</span></span><br><span class="line"></span><br><span class="line">range(<span class="number">0</span>, <span class="number">10</span>, <span class="number">3</span>)</span><br><span class="line">   <span class="number">0</span>, <span class="number">3</span>, <span class="number">6</span>, <span class="number">9</span></span><br><span class="line"></span><br><span class="line">range(<span class="number">-10</span>, <span class="number">-100</span>, <span class="number">-30</span>)</span><br><span class="line">  <span class="number">-10</span>, <span class="number">-40</span>, <span class="number">-70</span></span><br><span class="line">  </span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = [<span class="string">'Mary'</span>, <span class="string">'had'</span>, <span class="string">'a'</span>, <span class="string">'little'</span>, <span class="string">'lamb'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> i <span class="keyword">in</span> range(len(a)):</span><br><span class="line"><span class="meta">... </span>    print(i, a[i])</span><br><span class="line">...</span><br><span class="line"><span class="number">0</span> Mary</span><br><span class="line"><span class="number">1</span> had</span><br><span class="line"><span class="number">2</span> a</span><br><span class="line"><span class="number">3</span> little</span><br><span class="line"><span class="number">4</span> lamb</span><br></pre></td></tr></table></figure>
+
+<p>循环块中可以有else语句，当for循环结束后，或者while条件为false后执行，但是当break跳出循环的时候是不会执行else的。比如一个求质数的例子。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> n <span class="keyword">in</span> range(<span class="number">2</span>, <span class="number">10</span>):</span><br><span class="line"><span class="meta">... </span>    <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">2</span>, n):</span><br><span class="line"><span class="meta">... </span>        <span class="keyword">if</span> n % x == <span class="number">0</span>:</span><br><span class="line"><span class="meta">... </span>            print(n, <span class="string">'equals'</span>, x, <span class="string">'*'</span>, n//x)</span><br><span class="line"><span class="meta">... </span>            <span class="keyword">break</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">else</span>:</span><br><span class="line"><span class="meta">... </span>        <span class="comment"># for遍历完成并且没有找到一个因数</span></span><br><span class="line"><span class="meta">... </span>        print(n, <span class="string">'is a prime number'</span>)</span><br><span class="line">...</span><br><span class="line"><span class="number">2</span> <span class="keyword">is</span> a prime number</span><br><span class="line"><span class="number">3</span> <span class="keyword">is</span> a prime number</span><br><span class="line"><span class="number">4</span> equals <span class="number">2</span> * <span class="number">2</span></span><br><span class="line"><span class="number">5</span> <span class="keyword">is</span> a prime number</span><br><span class="line"><span class="number">6</span> equals <span class="number">2</span> * <span class="number">3</span></span><br><span class="line"><span class="number">7</span> <span class="keyword">is</span> a prime number</span><br><span class="line"><span class="number">8</span> equals <span class="number">2</span> * <span class="number">4</span></span><br><span class="line"><span class="number">9</span> equals <span class="number">3</span> * <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><h3 id="函数的定义"><a href="#函数的定义" class="headerlink" title="函数的定义"></a>函数的定义</h3><p>def关键字定义一个函数，后面跟形参，方法内容从下一行开始，必须缩进。<br>每一个函数都会返回一个值，即使他没有返回（return）语句，没有返回语句的会返回None。</p>
+<h3 id="函数的可变长度形参传递和参数默认值设置"><a href="#函数的可变长度形参传递和参数默认值设置" class="headerlink" title="函数的可变长度形参传递和参数默认值设置"></a>函数的可变长度形参传递和参数默认值设置</h3><blockquote>
+<p>定义一个函数</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ask_ok</span><span class="params">(prompt, retries=<span class="number">4</span>, reminder=<span class="string">'Please try again!'</span>)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        ok = input(prompt)</span><br><span class="line">        <span class="keyword">if</span> ok <span class="keyword">in</span> (<span class="string">'y'</span>, <span class="string">'ye'</span>, <span class="string">'yes'</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">if</span> ok <span class="keyword">in</span> (<span class="string">'n'</span>, <span class="string">'no'</span>, <span class="string">'nop'</span>, <span class="string">'nope'</span>):</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        retries = retries - <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> retries &lt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">'invalid user response'</span>)</span><br><span class="line">        print(reminder)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>调用函数时，我们可以认为拥有默认值的参数是可以不参与参数传递的。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ask_ok(<span class="string">'Do you really want to quit?'</span>)</span><br><span class="line">ask_ok(<span class="string">'OK to overwrite the file?'</span>, <span class="number">2</span>)</span><br><span class="line">ask_ok(<span class="string">'OK to overwrite the file?'</span>, <span class="number">2</span>, <span class="string">'Come on, only yes or no!'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在方法定义层面，上述方法的调用有一个参数是必须要传递的（required argument），有三个是可选（optional arguments）的 (三个可选参数：state,action,type)<br>在调用方法层面，又可以分为 键值参数（keyword arguments）和位置参数（positional arguments）。如下所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parrot</span><span class="params">(voltage, state=<span class="string">'a stiff'</span>, action=<span class="string">'voom'</span>, type=<span class="string">'Norwegian Blue'</span>)</span>:</span></span><br><span class="line">    print(<span class="string">"-- This parrot wouldn't"</span>, action, end=<span class="string">' '</span>)</span><br><span class="line">    print(<span class="string">"if you put"</span>, voltage, <span class="string">"volts through it."</span>)</span><br><span class="line">    print(<span class="string">"-- Lovely plumage, the"</span>, type)</span><br><span class="line">    print(<span class="string">"-- It's"</span>, state, <span class="string">"!"</span>)</span><br><span class="line">	</span><br><span class="line"></span><br><span class="line">方法调用时，值得注意的是，位置参数必须在键值参数之前：</span><br><span class="line">parrot(<span class="number">1000</span>)                                          <span class="comment"># 1 positional argument</span></span><br><span class="line">parrot(voltage=<span class="number">1000</span>)                                  <span class="comment"># 1 keyword argument</span></span><br><span class="line">parrot(voltage=<span class="number">1000000</span>, action=<span class="string">'VOOOOOM'</span>)             <span class="comment"># 2 keyword arguments</span></span><br><span class="line">parrot(action=<span class="string">'VOOOOOM'</span>, voltage=<span class="number">1000000</span>)             <span class="comment"># 2 keyword arguments</span></span><br><span class="line">parrot(<span class="string">'a million'</span>, <span class="string">'bereft of life'</span>, <span class="string">'jump'</span>)         <span class="comment"># 3 positional arguments</span></span><br><span class="line">parrot(<span class="string">'a thousand'</span>, state=<span class="string">'pushing up the daisies'</span>)  <span class="comment"># 1 positional, 1 keyword</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="可变长位置参数和可变长键值参数传递"><a href="#可变长位置参数和可变长键值参数传递" class="headerlink" title="可变长位置参数和可变长键值参数传递"></a>可变长位置参数和可变长键值参数传递</h3><p><strong>name代表任意长度的键值参数传递，<em>name代表任意长度的位置参数传递，</em>name必须在</strong>name之前，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cheeseshop</span><span class="params">(kind, *arguments, **keywords)</span>:</span></span><br><span class="line">    print(<span class="string">"-- Do you have any"</span>, kind, <span class="string">"?"</span>)</span><br><span class="line">    print(<span class="string">"-- I'm sorry, we're all out of"</span>, kind)</span><br><span class="line">    <span class="keyword">for</span> arg <span class="keyword">in</span> arguments:</span><br><span class="line">        print(arg)</span><br><span class="line">    print(<span class="string">"-"</span> * <span class="number">40</span>)</span><br><span class="line">    <span class="keyword">for</span> kw <span class="keyword">in</span> keywords:</span><br><span class="line">        print(kw, <span class="string">":"</span>, keywords[kw])</span><br><span class="line"></span><br><span class="line">		</span><br><span class="line">调用方法：</span><br><span class="line">cheeseshop(<span class="string">"Limburger"</span>, <span class="string">"It's very runny, sir."</span>,</span><br><span class="line">           <span class="string">"It's really very, VERY runny, sir."</span>,</span><br><span class="line">           shopkeeper=<span class="string">"Michael Palin"</span>,</span><br><span class="line">           client=<span class="string">"John Cleese"</span>,</span><br><span class="line">           sketch=<span class="string">"Cheese Shop Sketch"</span>)</span><br><span class="line">		   </span><br><span class="line">		   </span><br><span class="line">打印结果：</span><br><span class="line">-- Do you have any Limburger ?</span><br><span class="line">-- I<span class="string">'m sorry, we'</span>re all out of Limburger</span><br><span class="line">It<span class="string">'s very runny, sir.</span></span><br><span class="line"><span class="string">It'</span>s really very, VERY runny, sir.</span><br><span class="line">----------------------------------------</span><br><span class="line">shopkeeper : Michael Palin</span><br><span class="line">client : John Cleese</span><br><span class="line">sketch : Cheese Shop Sketch</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>另外，初始值只会在定义域初始化方法的时候计算一次，如果是可变对象如list和class实例，字典等的话会出现如下类似场景。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(a, L=[])</span>:</span></span><br><span class="line">    L.append(a)</span><br><span class="line">    <span class="keyword">return</span> L</span><br><span class="line"></span><br><span class="line">print(f(<span class="number">1</span>))</span><br><span class="line">print(f(<span class="number">2</span>))</span><br><span class="line">print(f(<span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">打印结果对应如下：</span><br><span class="line">[<span class="number">1</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="python中的数据结构"><a href="#python中的数据结构" class="headerlink" title="python中的数据结构"></a>python中的数据结构</h2><h3 id="使用list作为stack"><a href="#使用list作为stack" class="headerlink" title="使用list作为stack"></a>使用list作为stack</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack = [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.append(<span class="number">6</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.append(<span class="number">7</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack</span><br><span class="line">[<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.pop()</span><br><span class="line"><span class="number">7</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack</span><br><span class="line">[<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.pop()</span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack.pop()</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>stack</span><br><span class="line">[<span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用list作为queue"><a href="#使用list作为queue" class="headerlink" title="使用list作为queue"></a>使用list作为queue</h3><p>在队列中，list结尾的添加和弹出是很快的，但是list开头的插入和弹出是很慢的。<br>python为了提升队列的效率，python设计出了collections.deque，使用如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>queue = deque([<span class="string">"Eric"</span>, <span class="string">"John"</span>, <span class="string">"Michael"</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>queue.append(<span class="string">"Terry"</span>)           <span class="comment"># Terry arrives</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>queue.append(<span class="string">"Graham"</span>)          <span class="comment"># Graham arrives</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>queue.popleft()                 <span class="comment"># The first to arrive now leaves</span></span><br><span class="line"><span class="string">'Eric'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>queue.popleft()                 <span class="comment"># The second to arrive now leaves</span></span><br><span class="line"><span class="string">'John'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>queue                           <span class="comment"># Remaining queue in order of arrival</span></span><br><span class="line">deque([<span class="string">'Michael'</span>, <span class="string">'Terry'</span>, <span class="string">'Graham'</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="递推式构造列表（List-Comprehensions）"><a href="#递推式构造列表（List-Comprehensions）" class="headerlink" title="递推式构造列表（List Comprehensions）"></a>递推式构造列表（List Comprehensions）</h3><h2 id="高级定义"><a href="#高级定义" class="headerlink" title="高级定义"></a>高级定义</h2><h3 id="if-name-‘-main-‘-的含义"><a href="#if-name-‘-main-‘-的含义" class="headerlink" title="if _name_ == ‘_main_‘ 的含义"></a>if _<em>name_</em> == ‘_<em>main_</em>‘ 的含义</h3><p>一个 Python 源码文件除了可以被直接运行外，还可以作为模块（也就是库）被导入。不管是导入还是直接运行，最顶层的代码都会被运行（Python 用缩进来区分代码层次）。而实际上在导入的时候，有一部分代码我们是不希望被运行的。<br>例如如下代码我们只想在当做独立脚本的时候运行main()方法,其他模块import该模块的时候不想运行main()方法。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PI = <span class="number">3.14L</span>EGB</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"PI:"</span>, PI</span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+<p>if _<em>name_</em> == ‘_<em>main_</em>‘则可以很顺畅的解决该问题。<br>_<em>name_<em>是一个导入相关的模块内置属性。该属性不可刻意使用，它是每一个模块的全限定名称，在导入系统（THE IMPORT SYSTEM）中只能并且可以标识一个模块。<br>如果一个模块被直接运行（直接或者间接称成为顶级代码[top-level code]运行时），则其没有包结构，其 __name\</em></em> 值为 __main__。</p>
+<h3 id="CLASS描述"><a href="#CLASS描述" class="headerlink" title="CLASS描述"></a>CLASS描述</h3><p>名字空间(Namespaces)</p>
+<blockquote>
+<p>一些语言中比如c,c++,java 变量名是内存地址别名, 而Python的名字就是一个字符串，它与所指向的目标对象关联构成名字空间里面的一个键值对{name: object}，因此可以这么说，python的名字空间就是一个字典。<br>python里面有很多名字空间，每个地方都有自己的名字空间，互不干扰，不同空间中的两个相同名字的变量之间没有任何联系一般有4种: LEGB四种</p>
+</blockquote>
+<pre><code>locals:函数内部的名字空间，一般包括函数的局部变量以及形式参数
+enclosing function:在嵌套函数中外部函数的名字空间.
+globals:当前的模块空间，模块就是一些py文件。也就是说，globals()类似全局变量。
+__builtins__: 内置模块空间，也就是内置变量或者内置函数的名字空间。</code></pre><p>1.当程序引用某个变量的名字时，就会从当前名字空间开始搜索。搜索顺序规则便是: LEGB。2.使用locals()访问局部命名空间，使用globals()访问全局命名空间。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/08/27/usage-rabbitmq/" rel="prev" title="rabbitmq使用">
+      <i class="fa fa-chevron-left"></i> rabbitmq使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/01/16/java-jvm-threaddump/" rel="next" title="服务器隐忧排查">
+      服务器隐忧排查 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#数据类型和关键字"><span class="nav-number">1.</span> <span class="nav-text">数据类型和关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串"><span class="nav-number">1.1.</span> <span class="nav-text">字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串变量的索引"><span class="nav-number">1.1.1.</span> <span class="nav-text">字符串变量的索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原始字符串-不需反斜杠转义"><span class="nav-number">1.1.2.</span> <span class="nav-text">原始字符串(不需反斜杠转义)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#的应用"><span class="nav-number">1.1.3.</span> <span class="nav-text">_的应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符串的多行赋值"><span class="nav-number">1.1.4.</span> <span class="nav-text">字符串的多行赋值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数字类型"><span class="nav-number">1.2.</span> <span class="nav-text">数字类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#数字处理"><span class="nav-number">1.2.1.</span> <span class="nav-text">数字处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集合类型"><span class="nav-number">1.3.</span> <span class="nav-text">集合类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字"><span class="nav-number">1.4.</span> <span class="nav-text">关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#end的使用-避免打印新行"><span class="nav-number">1.4.1.</span> <span class="nav-text">end的使用 避免打印新行</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制流程"><span class="nav-number">2.</span> <span class="nav-text">控制流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if语句（使用elif代替其他编程语言的else-if，减少冗余的缩进）"><span class="nav-number">2.1.</span> <span class="nav-text">if语句（使用elif代替其他编程语言的else if，减少冗余的缩进）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for语句（只能在子语句中终结循环）"><span class="nav-number">2.2.</span> <span class="nav-text">for语句（只能在子语句中终结循环）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range函数"><span class="nav-number">2.3.</span> <span class="nav-text">range函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数"><span class="nav-number">3.</span> <span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数的定义"><span class="nav-number">3.1.</span> <span class="nav-text">函数的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数的可变长度形参传递和参数默认值设置"><span class="nav-number">3.2.</span> <span class="nav-text">函数的可变长度形参传递和参数默认值设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可变长位置参数和可变长键值参数传递"><span class="nav-number">3.3.</span> <span class="nav-text">可变长位置参数和可变长键值参数传递</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python中的数据结构"><span class="nav-number">4.</span> <span class="nav-text">python中的数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用list作为stack"><span class="nav-number">4.1.</span> <span class="nav-text">使用list作为stack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用list作为queue"><span class="nav-number">4.2.</span> <span class="nav-text">使用list作为queue</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#递推式构造列表（List-Comprehensions）"><span class="nav-number">4.3.</span> <span class="nav-text">递推式构造列表（List Comprehensions）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级定义"><span class="nav-number">5.</span> <span class="nav-text">高级定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#if-name-‘-main-‘-的含义"><span class="nav-number">5.1.</span> <span class="nav-text">if _name_ &#x3D;&#x3D; ‘_main_‘ 的含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CLASS描述"><span class="nav-number">5.2.</span> <span class="nav-text">CLASS描述</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

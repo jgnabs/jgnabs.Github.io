@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="集群搭建第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下： mkdir -p &#x2F;usr&#x2F;local&#x2F;redis-cluster     mkdir 7001、mkdir 7002、mkdir 7003、mkdir 7004、mkdir 7005、mkdir 7006     第二步：把之前的redis.conf配置文件分别copy到700修改各个文件内容，也就是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="redis使用">
+<meta property="og:url" content="http://yoursite.com/2017/08/17/usage-redis/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="集群搭建第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下： mkdir -p &#x2F;usr&#x2F;local&#x2F;redis-cluster     mkdir 7001、mkdir 7002、mkdir 7003、mkdir 7004、mkdir 7005、mkdir 7006     第二步：把之前的redis.conf配置文件分别copy到700修改各个文件内容，也就是">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-08-17T12:01:36.000Z">
+<meta property="article:modified_time" content="2020-01-13T01:54:31.349Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="redis">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2017/08/17/usage-redis/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>redis使用 | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/17/usage-redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          redis使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-08-17 20:01:36" itemprop="dateCreated datePublished" datetime="2017-08-17T20:01:36+08:00">2017-08-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-13 09:54:31" itemprop="dateModified" datetime="2020-01-13T09:54:31+08:00">2020-01-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="集群搭建"><a href="#集群搭建" class="headerlink" title="集群搭建"></a>集群搭建</h2><h3 id="第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下："><a href="#第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下：" class="headerlink" title="第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下："></a>第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下：</h3><ul>
+<li>mkdir -p /usr/local/redis-cluster    </li>
+<li>mkdir 7001、mkdir 7002、mkdir 7003、mkdir 7004、mkdir 7005、mkdir 7006   </li>
+</ul>
+<h3 id="第二步：把之前的redis-conf配置文件分别copy到700修改各个文件内容，也就是对700下的每一个copy的redis-conf文件进行修改！如下："><a href="#第二步：把之前的redis-conf配置文件分别copy到700修改各个文件内容，也就是对700下的每一个copy的redis-conf文件进行修改！如下：" class="headerlink" title="第二步：把之前的redis.conf配置文件分别copy到700修改各个文件内容，也就是对700下的每一个copy的redis.conf文件进行修改！如下："></a>第二步：把之前的redis.conf配置文件分别copy到700<em>修改各个文件内容，也就是对700</em>下的每一个copy的redis.conf文件进行修改！如下：</h3><ul>
+<li>daemonize yes      </li>
+<li>port 700*（分别对每个机器的端口号进行设置）         </li>
+<li>bind 192.168.131.171（必须要绑定当前机器的ip，不然会无限悲剧下去哇..深坑勿入！！！）   </li>
+<li>dir /usr/local/redis-cluster/700*/（指定数据文件存放位置，必须要指定不同的目录位置，不然会丢失数据，深坑勿入！！！）   </li>
+<li>cluster-enabled yes（启动集群模式，开始玩耍）   </li>
+<li>cluster-config-file nodes700*.conf（这里700x最好和port对应上）   </li>
+<li>cluster-node-timeout 5000   </li>
+<li>appendonly yes   </li>
+</ul>
+<h3 id="第三步：注意每个文件要修改端口号，bind的ip，数据存放的dir，并且nodes文件都需要进行修改！"><a href="#第三步：注意每个文件要修改端口号，bind的ip，数据存放的dir，并且nodes文件都需要进行修改！" class="headerlink" title="第三步：注意每个文件要修改端口号，bind的ip，数据存放的dir，并且nodes文件都需要进行修改！"></a>第三步：注意每个文件要修改端口号，bind的ip，数据存放的dir，并且nodes文件都需要进行修改！</h3><h3 id="第四步：由于redis集群需要使用ruby命令，所以我们需要安装ruby"><a href="#第四步：由于redis集群需要使用ruby命令，所以我们需要安装ruby" class="headerlink" title="第四步：由于redis集群需要使用ruby命令，所以我们需要安装ruby"></a>第四步：由于redis集群需要使用ruby命令，所以我们需要安装ruby</h3><ul>
+<li>yum -y install gcc openssl-devel libyaml-devel libffi-devel readline-devel zlib-devel gdbm-devel ncurses-devel gcc-c++ automake autoconf  </li>
+<li>yum -y install ruby rubygems </li>
+<li>gem install redis （安装redis和ruby的接口）</li>
+</ul>
+<h3 id="第五步：分别启动6个redis实例，然后检查是否启动成功"><a href="#第五步：分别启动6个redis实例，然后检查是否启动成功" class="headerlink" title="第五步：分别启动6个redis实例，然后检查是否启动成功"></a>第五步：分别启动6个redis实例，然后检查是否启动成功</h3><ul>
+<li>usr/local/redis/bin/redis-server /usr/local/redis-cluster/700*/redis.conf </li>
+<li>ps -el | grep redis 查看是否启动成功</li>
+</ul>
+<h3 id="第六步：首先到redis3-0的安装目录下，然后执行redis-trib-rb命令。"><a href="#第六步：首先到redis3-0的安装目录下，然后执行redis-trib-rb命令。" class="headerlink" title="第六步：首先到redis3.0的安装目录下，然后执行redis-trib.rb命令。"></a>第六步：首先到redis3.0的安装目录下，然后执行redis-trib.rb命令。</h3><ul>
+<li>cd /usr/local/redis3.0/src</li>
+<li>./redis-trib.rb  create –replicas 1 192.168.131.171:7001 192.168.131.171:7002 192.168.131.171:7003 192.168.131.171:7004 192.168.131.171:7005 192.168.131.171:7006</li>
+</ul>
+<h3 id="第七步：到此为止我们集群搭建成功！进行验证："><a href="#第七步：到此为止我们集群搭建成功！进行验证：" class="headerlink" title="第七步：到此为止我们集群搭建成功！进行验证："></a>第七步：到此为止我们集群搭建成功！进行验证：</h3><ul>
+<li>连接任意一个客户端即可：./redis-cli -c -h -p （-c表示集群模式，指定ip地址和端口号）如：/usr/local/redis/bin/redis-cli -c -h 192.168.131.171 -p 700*</li>
+<li>进行验证：cluster info（查看集群信息）、cluster nodes（查看节点列表）</li>
+<li>进行数据操作验证</li>
+<li>关闭集群则需要逐个进行关闭，使用命令：usr/local/redis/bin/redis-cli -c -h 192.168.131.171 -p 700* shutdown</li>
+</ul>
+<h3 id="第八步：（补充）"><a href="#第八步：（补充）" class="headerlink" title="第八步：（补充）"></a>第八步：（补充）</h3><p>友情提示：当出现集群无法启动时，删除临时的数据文件，再次重新启动每一个redis服务，然后重新构造集群环境。</p>
+<h3 id="第九步：（集群操作文章）"><a href="#第九步：（集群操作文章）" class="headerlink" title="第九步：（集群操作文章）"></a>第九步：（集群操作文章）</h3><p>redis-trib.rb官方群操作命令： <a href="http://redis.io/topics/cluster-tutorial" target="_blank" rel="noopener">链接</a></p>
+<p>推荐博客：<a href="http://blog.51yip.com/nosql/1726.html/comment-page-1" target="_blank" rel="noopener">链接</a></p>
+<h3 id="搭建可能遇到的问题"><a href="#搭建可能遇到的问题" class="headerlink" title="搭建可能遇到的问题"></a>搭建可能遇到的问题</h3><h4 id="ruby版本低下"><a href="#ruby版本低下" class="headerlink" title="ruby版本低下"></a>ruby版本低下</h4><p>升级方法：<a href="http://www.iyu.co/web/centos-install-ruby/" target="_blank" rel="noopener">链接</a></p>
+<h2 id="redis的特性"><a href="#redis的特性" class="headerlink" title="redis的特性"></a>redis的特性</h2><h3 id="快照-rdb"><a href="#快照-rdb" class="headerlink" title="快照(rdb)"></a>快照(rdb)</h3><p>(原理:每隔n分钟或N次写入后从内存dump数据形成rdb文件压缩，放至到目录上。完成rdb快照文件的生成之后，就替换之前的旧的快照文件)<br>save 900 1    //900内,有1条写入,则产生快照<br>save 300 1000    //如果300秒内有1000次写入,则产生快照<br>save 60 10000    //如果60秒内有10000次写入,则产生快照</p>
+<blockquote>
+<p>NOTE:这3个选项都屏蔽,则rdb禁用<br>NOTE:新版本由新的进程(后台备份进程)导出.</p>
+</blockquote>
+<p>stop-writes-on-bgsave-error yes    //后台备份进程出错时,主进程停不停止写入? (rdb的导入进程出错了，redis停止写入)<br>rdbcompression yes    //导出的rdb文件是否压缩<br>Rdbchecksum yes    //导入rbd恢复时数据时,要不要检验rdb的完整性:<br>dbfilename dump.rdb    //导出来的rdb文件名<br>dir ./    //rdb的放置路径</p>
+<blockquote>
+<p>NOTE: 保存条件：1分钟，5分钟，15分钟才保存，所以不在里面做的修改，断电等,故障都会丢失。<br>NOTE: rdb的缺点，时间间隔内容易造成数据丢失。</p>
+</blockquote>
+<h3 id="日志-aof"><a href="#日志-aof" class="headerlink" title="日志(aof)"></a>日志(aof)</h3><p>(aof原理，每执行一个命令，aof进程都会将命令记录到txt文档中，写txt会严重拖慢redis。)<br>appendonly no    //是否打开 aof日志功能(yes:打开)<br>appendfsync always    //每1个命令,都立即同步到aof. 安全,速度慢<br>appendfsync everysec    //折衷方案,每秒写1次<br>appendfsync no    //写入工作交给操作系统,由操作系统判断缓冲区大小,统一写入到aof. 同步频率低,速度快,<br>no-appendfsync-on-rewrite yes:    //正在导出rdb快照的过程中,要不要停止同步aof<br>auto-aof-rewrite-percentage 100    //aof文件大小比起上次重写时的大小,增长率100%时,重写<br>auto-aof-rewrite-min-size 64mb    //aof文件,至少超过64M时,重写</p>
+<h3 id="aof的fsync策略"><a href="#aof的fsync策略" class="headerlink" title="aof的fsync策略"></a>aof的fsync策略</h3><ul>
+<li><p>每次写入一条数据就执行一次fsync</p>
+<blockquote>
+<p>每次写入一条数据，立即将这个数据对应的写日志fsync到磁盘上去，性能非常非常差，吞吐量很低; 确保说redis里的数据一条都不丢，那就只能这样了。</p>
+</blockquote>
+</li>
+<li><p>每隔一秒执行一次fsync</p>
+<blockquote>
+<p>每秒将os cache中的数据fsync到磁盘，这个最常用的，生产环境一般都这么配置，性能很高，QPS还是可以上万的。</p>
+</blockquote>
+</li>
+<li><p>不主动执行fsync</p>
+<blockquote>
+<p>仅仅redis负责将数据写入os cache就撒手不管了，然后后面os自己会时不时有自己的策略将数据刷入磁盘，不可控了。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="哨兵（sentinel，sentinel主要是监控主从redis是否运行正常，不正常切换主从-）"><a href="#哨兵（sentinel，sentinel主要是监控主从redis是否运行正常，不正常切换主从-）" class="headerlink" title="哨兵（sentinel，sentinel主要是监控主从redis是否运行正常，不正常切换主从.）"></a>哨兵（sentinel，sentinel主要是监控主从redis是否运行正常，不正常切换主从.）</h3><p>sentinel监控主从原理：监控主redis,如果不回应出现问题，就会将slave设为master，其他slave指向它。<br>Sentinel不断与master通信,获取master的slave信息，监听master与slave的状态。<br>如果某slave失效,直接通知master去除该slave.<br>如果master失效,,是按照slave优先级(可配置), 选取1个slave做 new master。</p>
+<h3 id="主从复制流程（这个过程是异步的）"><a href="#主从复制流程（这个过程是异步的）" class="headerlink" title="主从复制流程（这个过程是异步的）"></a>主从复制流程（这个过程是异步的）</h3><ul>
+<li>1、slave server启动连接到master server之后，salve server主动发送SYNC命令给master server。</li>
+<li>2、master server接受SYNC命令之后，判断，是否有正在进行内存快照的子进程，如果有，则等待其结束，否则，fork一个子进程，子进程把内存数据保存为文件，并发送给slave server。</li>
+<li>3、master server子进程进程做数据快照时，父进程可以继续接收client端请求写数据，此时，父进程把新写入的数据放到待发送缓存队列(backlog,默认大小是1M)中。</li>
+<li>4、slave server 接收内存快照文件之后，清空内存数据，根据接收的快照文件，重建内存表数据结构。</li>
+<li>5、master server把快照文件发送完毕之后，发送缓存队列中保存的子进程快照期间改变的数据给slave server，slave server做相同处理，保存数据一致性。</li>
+<li>6、master server 后续接收的数据，都会通过步骤1建立的连接，把数据发送到slave server。</li>
+</ul>
+<p>NOTE:<br>（1）redis采用异步方式复制数据到slave节点，不过redis 2.8开始，slave node会周期性地确认自己每次复制的数据量<br>（2）一个master node是可以配置多个slave node的<br>（3）slave node也可以连接其他的slave node<br>（4）slave node做复制的时候，是不会block master node的正常工作的<br>（5）slave node在做复制的时候，也不会block对自己的查询操作，它会用旧的数据集来提供服务; 但是复制完成的时候，需要删除旧数据集，加载新数据集，这个时候就会暂停对外服务了<br>（6）slave node主要用来进行横向扩容，做读写分离，扩容的slave node可以提高读的吞吐量    </p>
+<h3 id="异步复制导致的数据丢失（redis数据复制问题）"><a href="#异步复制导致的数据丢失（redis数据复制问题）" class="headerlink" title="异步复制导致的数据丢失（redis数据复制问题）"></a>异步复制导致的数据丢失（redis数据复制问题）</h3><blockquote>
+<p>因为master -&gt; slave的复制是异步的，所以可能有部分数据还没复制到slave，master就宕机了，此时这些部分数据就丢失了</p>
+</blockquote>
+<h3 id="脑裂（redis数据复制问题）"><a href="#脑裂（redis数据复制问题）" class="headerlink" title="脑裂（redis数据复制问题）"></a>脑裂（redis数据复制问题）</h3><blockquote>
+<p>也就是说，某个master所在机器突然脱离了正常的网络，跟其他slave机器不能连接，但是实际上master还运行着<br>此时哨兵可能就会认为master宕机了，然后开启选举，将其他slave切换成了master<br>这个时候，集群里就会有两个master，也就是所谓的脑裂<br>此时虽然某个slave被切换成了master，但是可能client还没来得及切换到新的master，还继续写向旧master的数据可能也丢失了<br>因此旧master再次恢复的时候，会被作为一个slave挂到新的master上去，自己的数据会清空，重新从新的master复制数据</p>
+</blockquote>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p>Q:在dump rdb过程中,aof如果停止同步,会不会丢失？</p>
+<blockquote>
+<p>A:不会,所有的操作缓存在内存的队列里, dump完成后,统一操作.</p>
+</blockquote>
+<p>Q:aof重写什么意思？</p>
+<blockquote>
+<p>A:aof重写是指把内存中的数据,逆化成命令,写入到.aof日志里.<br>以解决 aof日志过大的问题.（因为对同一key value操作的步骤比较多，日志比较多，但内存中就有一个最终的状态，所以重写成简单一次性命令<br>比如最终set key value.降低文件的大小。</p>
+</blockquote>
+<p>Q:如果rdb文件,和aof文件都存在,优先用谁来恢复数据？</p>
+<blockquote>
+<p>A:aof文件的完整度较高。</p>
+</blockquote>
+<p>Q:恢复时rdb和aof哪个恢复的快？</p>
+<blockquote>
+<p>A:rdb快,因为其是数据的内存映射,直接载入到内存,而aof是命令,需要逐条执行。</p>
+</blockquote>
+<p>Q:sentinel与master通信,如果某次因为master IO操作频繁,导致超时,此时,认为master失效,很武断，怎么办？</p>
+<blockquote>
+<p>A:sentnel允许多个实例看守1个master, 当N台(N可设置)sentinel都认为master失效,才正式失效。</p>
+</blockquote>
+<p>Q:在redis中保存几条数据，立即停掉redis进程，然后重启redis，数据还在吗？为什么？</p>
+<blockquote>
+<p>A:带出来一个知识点，通过redis-cli SHUTDOWN这种方式去停掉redis，其实是一种安全退出的模式，redis在退出的时候会将内存中的数据立即生成一份完整的rdb快照</p>
+</blockquote>
+<p>redis缓存架构<a href="https://www.jianshu.com/u/baad5ee99ca9" target="_blank" rel="noopener">链接</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/redis/" rel="tag"># redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/07/08/boot-start/" rel="prev" title="服务端的boot程序">
+      <i class="fa fa-chevron-left"></i> 服务端的boot程序
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/08/27/usage-rabbitmq/" rel="next" title="rabbitmq使用">
+      rabbitmq使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#集群搭建"><span class="nav-number">1.</span> <span class="nav-text">集群搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下："><span class="nav-number">1.1.</span> <span class="nav-text">第一步：创建一个文件夹redis-cluster，然后在其下面分别创建6个文件夹如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二步：把之前的redis-conf配置文件分别copy到700修改各个文件内容，也就是对700下的每一个copy的redis-conf文件进行修改！如下："><span class="nav-number">1.2.</span> <span class="nav-text">第二步：把之前的redis.conf配置文件分别copy到700修改各个文件内容，也就是对700下的每一个copy的redis.conf文件进行修改！如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第三步：注意每个文件要修改端口号，bind的ip，数据存放的dir，并且nodes文件都需要进行修改！"><span class="nav-number">1.3.</span> <span class="nav-text">第三步：注意每个文件要修改端口号，bind的ip，数据存放的dir，并且nodes文件都需要进行修改！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第四步：由于redis集群需要使用ruby命令，所以我们需要安装ruby"><span class="nav-number">1.4.</span> <span class="nav-text">第四步：由于redis集群需要使用ruby命令，所以我们需要安装ruby</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第五步：分别启动6个redis实例，然后检查是否启动成功"><span class="nav-number">1.5.</span> <span class="nav-text">第五步：分别启动6个redis实例，然后检查是否启动成功</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第六步：首先到redis3-0的安装目录下，然后执行redis-trib-rb命令。"><span class="nav-number">1.6.</span> <span class="nav-text">第六步：首先到redis3.0的安装目录下，然后执行redis-trib.rb命令。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第七步：到此为止我们集群搭建成功！进行验证："><span class="nav-number">1.7.</span> <span class="nav-text">第七步：到此为止我们集群搭建成功！进行验证：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第八步：（补充）"><span class="nav-number">1.8.</span> <span class="nav-text">第八步：（补充）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第九步：（集群操作文章）"><span class="nav-number">1.9.</span> <span class="nav-text">第九步：（集群操作文章）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搭建可能遇到的问题"><span class="nav-number">1.10.</span> <span class="nav-text">搭建可能遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ruby版本低下"><span class="nav-number">1.10.1.</span> <span class="nav-text">ruby版本低下</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis的特性"><span class="nav-number">2.</span> <span class="nav-text">redis的特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#快照-rdb"><span class="nav-number">2.1.</span> <span class="nav-text">快照(rdb)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志-aof"><span class="nav-number">2.2.</span> <span class="nav-text">日志(aof)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aof的fsync策略"><span class="nav-number">2.3.</span> <span class="nav-text">aof的fsync策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#哨兵（sentinel，sentinel主要是监控主从redis是否运行正常，不正常切换主从-）"><span class="nav-number">2.4.</span> <span class="nav-text">哨兵（sentinel，sentinel主要是监控主从redis是否运行正常，不正常切换主从.）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主从复制流程（这个过程是异步的）"><span class="nav-number">2.5.</span> <span class="nav-text">主从复制流程（这个过程是异步的）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步复制导致的数据丢失（redis数据复制问题）"><span class="nav-number">2.6.</span> <span class="nav-text">异步复制导致的数据丢失（redis数据复制问题）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脑裂（redis数据复制问题）"><span class="nav-number">2.7.</span> <span class="nav-text">脑裂（redis数据复制问题）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常见问题"><span class="nav-number">3.</span> <span class="nav-text">常见问题</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

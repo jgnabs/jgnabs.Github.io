@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="测试文件testtxt内容  123456789101112northwest       NW      Charles Main    3.0     .98     3       34  northwest       NW      Charles Main    3.0     .98     3       34  western         WE      Sharon Gra">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux中的字符集">
+<meta property="og:url" content="http://yoursite.com/2016/08/30/linux-character-set/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="测试文件testtxt内容  123456789101112northwest       NW      Charles Main    3.0     .98     3       34  northwest       NW      Charles Main    3.0     .98     3       34  western         WE      Sharon Gra">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-08-30T01:30:16.000Z">
+<meta property="article:modified_time" content="2020-01-13T01:54:31.301Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2016/08/30/linux-character-set/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>linux中的字符集 | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/30/linux-character-set/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux中的字符集
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-08-30 09:30:16" itemprop="dateCreated datePublished" datetime="2016-08-30T09:30:16+08:00">2016-08-30</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-13 09:54:31" itemprop="dateModified" datetime="2020-01-13T09:54:31+08:00">2020-01-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>测试文件<code>testtxt</code>内容 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">northwest       NW      Charles Main    3.0     .98     3       34  </span><br><span class="line">northwest       NW      Charles Main    3.0     .98     3       34  </span><br><span class="line">western         WE      Sharon Gray     5.3     .97     5       23  </span><br><span class="line">southwest       SW      Lewis Dalsass   2.7     .8      2       18  </span><br><span class="line">southern        SO      Suan Chin       5.1     .95     4       15  </span><br><span class="line">southeast       SE      Patricia Hemenway       4.0     .7      4       17  </span><br><span class="line">eastern         EA      TB Savage       4.4     .84     5       20  </span><br><span class="line">northeast       NE      AM Main Jr.     5.1     .94     3       13    </span><br><span class="line">northeast       NE      AM Main Jr.     5.1     .94     3       13  </span><br><span class="line">north           NO      Margot Weber    4.5     .89     5       9  </span><br><span class="line">north           NO      Margot Weber    4.5     .89     5       9  </span><br><span class="line">central         CT      Ann Stephens    5.7     .94     5       13</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="linux-shell通配符-wildcard"><a href="#linux-shell通配符-wildcard" class="headerlink" title="linux shell通配符(wildcard)"></a>linux shell通配符(wildcard)</h3><blockquote>
+<p>通配符是由shell处理的（我们在shell各个命令帮助中也没有发现有这些通配符介绍）, 它只会出现在 命令的“参数”里（它不用在命令名称里， 也不用在操作符上）。当shell在“参数”中遇到了通配符时，shell会将其当作路径或文件名去在磁盘上搜寻可能的匹配：若符合要求的匹配存在，则进行代换(路径扩展)；否则就将该通配符作为一个普通字符传递给“命令”，然后再由命令进行处理。总之，通配符 实际上就是一种shell实现的路径扩展功能。在 通配符被处理后, shell会先完成该命令的重组，然后再继续处理重组后的命令，直至执行该命令。</p>
+</blockquote>
+<blockquote>
+<p>例如，ls *.txt 实际shell搜索文件,找到了符合条件的文件，命令会变成：ls a.txt b.txt ,实际在执行ls 时候传给它的是a.txt b.txt。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>*</td>
+<td>匹配 0 或多个字符    a*b</td>
+<td>a与b之间可以有任意长度的任意字符, 也可以一个也没有, 如aabcb, axyzb, a012b, ab。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配任意一个字符    a?b</td>
+<td>a与b之间必须也只能有一个字符, 可以是任意字符, 如aab, abb, acb, a0b。</td>
+</tr>
+<tr>
+<td>[list]</td>
+<td>匹配 list 中的任意单一字符    a[xyz]b</td>
+<td>a与b之间必须也只能有一个字符, 但只能是 x 或 y 或 z, 如: axb, ayb, azb。</td>
+</tr>
+<tr>
+<td>[!list]</td>
+<td>匹配 除list 中的任意单一字符</td>
+<td>a[!0-9]b  a与b之间必须也只能有一个字符, 但不能是阿拉伯数字, 如axb, aab, a-b。</td>
+</tr>
+<tr>
+<td>[c1-c2]</td>
+<td>匹配 c1-c2 中的任意单一字符 如：[0-9] [a-z]</td>
+<td>a[0-9]b  0与9之间必须也只能有一个字符 如a0b, a1b… a9b。</td>
+</tr>
+<tr>
+<td>{string1,string2,…}</td>
+<td>匹配 sring1 或 string2 (或更多)其一字符串</td>
+<td>a{abc,xyz,123}b，a与b之间只能是abc或xyz或123这三个字符串之一。</td>
+</tr>
+</tbody></table>
+<p><strong>需要说明的是：通配符看起来有点象正则表达式语句，但是它与正则表达式不同的，不能相互混淆。把通配符理解为shell 特殊代号字符就可。而且涉及的只有，*,? [] ,{} 这几种。</strong><br>有时候，我们想让 通配符，或者元字符 变成普通字符，不需要使用它。那么这里我们就需要用到转义符了。 shell提供转义符有三种。</p>
+<h3 id="Linux元字符"><a href="#Linux元字符" class="headerlink" title="Linux元字符"></a>Linux元字符</h3><p><strong>元字符是shell编程最重要的组成部分，并且内容也比较多，开篇记录。</strong></p>
+<h3 id="Linux转义字符"><a href="#Linux转义字符" class="headerlink" title="Linux转义字符"></a>Linux转义字符</h3><p>有时候，我们想让 通配符，或者元字符 变成普通字符，不需要使用它。那么这里我们就需要用到转义符了。 shell提供转义符有三种。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>‘’(单引号)</td>
+<td>又叫硬转义，其内部所有的shell 元字符、通配符都会被关掉。注意，硬转义中不允许出现’(单引号)。</td>
+<td>ls ‘*txt’ 匹配不了testtxt文件或者 echo ‘$PATH’</td>
+</tr>
+<tr>
+<td>“”(双引号)</td>
+<td>又叫软转义，其内部只允许出现特定的shell 元字符：$用于参数代换 `用于命令代替</td>
+<td>echo “$PATH”</td>
+</tr>
+<tr>
+<td>\ (反斜杠)</td>
+<td>又叫转义，去除其后紧跟的元字符或通配符的特殊意义。</td>
+<td>ls  \*.txt 无法匹配</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/07/30/jquery-common-ques/" rel="prev" title="jquery选择器记录">
+      <i class="fa fa-chevron-left"></i> jquery选择器记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/09/01/linux-meta-set/" rel="next" title="shell编程的元字符">
+      shell编程的元字符 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#linux-shell通配符-wildcard"><span class="nav-number">1.</span> <span class="nav-text">linux shell通配符(wildcard)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux元字符"><span class="nav-number">2.</span> <span class="nav-text">Linux元字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux转义字符"><span class="nav-number">3.</span> <span class="nav-text">Linux转义字符</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

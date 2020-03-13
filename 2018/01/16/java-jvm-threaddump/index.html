@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="linux查询耗费进程的pidtop -H 查询该进程的线程占用情况top -H -p $pid或者top -p $pid,shift + h 线程按照CPU排序。 查询线程状态信息jstack $pid |grep $tid(需要转换为十六进制) -A 30 jstack命令记录jstack -l $pidjstack -l -m $pid #to print both java and nat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="服务器隐忧排查">
+<meta property="og:url" content="http://yoursite.com/2018/01/16/java-jvm-threaddump/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="linux查询耗费进程的pidtop -H 查询该进程的线程占用情况top -H -p $pid或者top -p $pid,shift + h 线程按照CPU排序。 查询线程状态信息jstack $pid |grep $tid(需要转换为十六进制) -A 30 jstack命令记录jstack -l $pidjstack -l -m $pid #to print both java and nat">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-01-16T06:17:53.000Z">
+<meta property="article:modified_time" content="2020-01-13T01:54:31.296Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2018/01/16/java-jvm-threaddump/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>服务器隐忧排查 | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/java-jvm-threaddump/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          服务器隐忧排查
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-16 14:17:53" itemprop="dateCreated datePublished" datetime="2018-01-16T14:17:53+08:00">2018-01-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-13 09:54:31" itemprop="dateModified" datetime="2020-01-13T09:54:31+08:00">2020-01-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h1><h2 id="查询耗费进程的pid"><a href="#查询耗费进程的pid" class="headerlink" title="查询耗费进程的pid"></a>查询耗费进程的pid</h2><p>top -H</p>
+<h2 id="查询该进程的线程占用情况"><a href="#查询该进程的线程占用情况" class="headerlink" title="查询该进程的线程占用情况"></a>查询该进程的线程占用情况</h2><p>top -H -p $pid<br>或者top -p $pid,shift + h 线程按照CPU排序。</p>
+<h2 id="查询线程状态信息"><a href="#查询线程状态信息" class="headerlink" title="查询线程状态信息"></a>查询线程状态信息</h2><p>jstack $pid |grep $tid(需要转换为十六进制) -A 30</p>
+<h2 id="jstack命令记录"><a href="#jstack命令记录" class="headerlink" title="jstack命令记录"></a>jstack命令记录</h2><p>jstack -l $pid<br>jstack -l -m $pid #to print both java and native frames (mixed mode)，打印java和本地帧。如果调用动态库的话 一定要带上该参数。</p>
+<h3 id="ThreadDump文件"><a href="#ThreadDump文件" class="headerlink" title="ThreadDump文件"></a>ThreadDump文件</h3><p>jstack -l $pid | tee -a $file-path</p>
+<h2 id="直接转换十六进制"><a href="#直接转换十六进制" class="headerlink" title="直接转换十六进制"></a>直接转换十六进制</h2><p>echo ‘obase=16; $pid’ | bc 或者  printf “%x\n” $pid</p>
+<h2 id="显示内存模型信息"><a href="#显示内存模型信息" class="headerlink" title="显示内存模型信息"></a>显示内存模型信息</h2><p>jmap -histo:live $pid | head -n 100</p>
+<h2 id="统计打印出来的Thread-Info"><a href="#统计打印出来的Thread-Info" class="headerlink" title="统计打印出来的Thread_Info"></a>统计打印出来的Thread_Info</h2><p>grep java.lang.Thread.State abnormalThreadInfo.txt | awk ‘{print $2$3$4$5}’ | sort | uniq -c</p>
+<h1 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h1><h2 id="查看当前Java的进程信息"><a href="#查看当前Java的进程信息" class="headerlink" title="查看当前Java的进程信息"></a>查看当前Java的进程信息</h2><p>jps -l</p>
+<h2 id="查看当前存活的对象"><a href="#查看当前存活的对象" class="headerlink" title="查看当前存活的对象"></a>查看当前存活的对象</h2><p>jmap -histo:live $pid</p>
+<h2 id="打印当前的堆信息"><a href="#打印当前的堆信息" class="headerlink" title="打印当前的堆信息"></a>打印当前的堆信息</h2><p>jmap –heap $pid</p>
+<h1 id="jstat命令指南"><a href="#jstat命令指南" class="headerlink" title="jstat命令指南"></a>jstat命令指南</h1><h2 id="类加载统计"><a href="#类加载统计" class="headerlink" title="类加载统计"></a>类加载统计</h2><p>jstat -class $pid   </p>
+<blockquote>
+<p>Loaded:加载class的数量<br>Bytes：所占用空间大小<br>Unloaded：未加载数量<br>Bytes:未加载占用空间<br>Time：时间 </p>
+</blockquote>
+<h2 id="类编译统计"><a href="#类编译统计" class="headerlink" title="类编译统计"></a>类编译统计</h2><p>jstat -compiler 6988  </p>
+<blockquote>
+<p>Compiled：编译数量。<br>Failed：失败数量<br>Invalid：不可用数量<br>Time：时间<br>FailedType：失败类型<br>FailedMethod：失败的方法 </p>
+</blockquote>
+<h2 id="总结统计"><a href="#总结统计" class="headerlink" title="总结统计"></a>总结统计</h2><p>jstat -gcutil $pid<br><a href="https://www.cnblogs.com/yjd_hycf_space/p/7755633.html" target="_blank" rel="noopener">jvm-各分区定义</a></p>
+<h1 id="jinfo命令指南"><a href="#jinfo命令指南" class="headerlink" title="jinfo命令指南"></a>jinfo命令指南</h1><h2 id="查看某进程的参数信息"><a href="#查看某进程的参数信息" class="headerlink" title="查看某进程的参数信息"></a>查看某进程的参数信息</h2><p>jinfo -flags $pid</p>
+<h2 id="筛选某进程的某一参数信息"><a href="#筛选某进程的某一参数信息" class="headerlink" title="筛选某进程的某一参数信息"></a>筛选某进程的某一参数信息</h2><p>jinfo -flag MaxHeapSize $pid    #此参数已经在JAVA8中过期了，转换为了metaspace。</p>
+<blockquote>
+<p>jinfo还可以直接更改参数的值，使用在生产情况。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/11/25/python-grammar-notes/" rel="prev" title="python特殊语法笔记">
+      <i class="fa fa-chevron-left"></i> python特殊语法笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/03/31/sql-oralce-install/" rel="next" title="oracle安装记录">
+      oracle安装记录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#linux"><span class="nav-number">1.</span> <span class="nav-text">linux</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查询耗费进程的pid"><span class="nav-number">1.1.</span> <span class="nav-text">查询耗费进程的pid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询该进程的线程占用情况"><span class="nav-number">1.2.</span> <span class="nav-text">查询该进程的线程占用情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询线程状态信息"><span class="nav-number">1.3.</span> <span class="nav-text">查询线程状态信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#jstack命令记录"><span class="nav-number">1.4.</span> <span class="nav-text">jstack命令记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadDump文件"><span class="nav-number">1.4.1.</span> <span class="nav-text">ThreadDump文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#直接转换十六进制"><span class="nav-number">1.5.</span> <span class="nav-text">直接转换十六进制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#显示内存模型信息"><span class="nav-number">1.6.</span> <span class="nav-text">显示内存模型信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#统计打印出来的Thread-Info"><span class="nav-number">1.7.</span> <span class="nav-text">统计打印出来的Thread_Info</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#windows"><span class="nav-number">2.</span> <span class="nav-text">windows</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看当前Java的进程信息"><span class="nav-number">2.1.</span> <span class="nav-text">查看当前Java的进程信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看当前存活的对象"><span class="nav-number">2.2.</span> <span class="nav-text">查看当前存活的对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打印当前的堆信息"><span class="nav-number">2.3.</span> <span class="nav-text">打印当前的堆信息</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jstat命令指南"><span class="nav-number">3.</span> <span class="nav-text">jstat命令指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#类加载统计"><span class="nav-number">3.1.</span> <span class="nav-text">类加载统计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类编译统计"><span class="nav-number">3.2.</span> <span class="nav-text">类编译统计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结统计"><span class="nav-number">3.3.</span> <span class="nav-text">总结统计</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jinfo命令指南"><span class="nav-number">4.</span> <span class="nav-text">jinfo命令指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看某进程的参数信息"><span class="nav-number">4.1.</span> <span class="nav-text">查看某进程的参数信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#筛选某进程的某一参数信息"><span class="nav-number">4.2.</span> <span class="nav-text">筛选某进程的某一参数信息</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

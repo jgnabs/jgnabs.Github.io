@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="sed命令格式 sed 命令行格式为： sed [选项] command 输入文本sed 命令并不会改变源文件的内容。sed 把每一行都存在临时缓存区中，对这个副本进行编辑，所以不会修改或破坏源文件。  测试文件testsed内容  123456789101112northwest       NW      Charles Main    3.0     .98     3       34">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sed命令使用">
+<meta property="og:url" content="http://yoursite.com/2016/09/26/linux-cmd-sed/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="sed命令格式 sed 命令行格式为： sed [选项] command 输入文本sed 命令并不会改变源文件的内容。sed 把每一行都存在临时缓存区中，对这个副本进行编辑，所以不会修改或破坏源文件。  测试文件testsed内容  123456789101112northwest       NW      Charles Main    3.0     .98     3       34">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-09-26T09:22:24.000Z">
+<meta property="article:modified_time" content="2020-01-13T01:54:31.303Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2016/09/26/linux-cmd-sed/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>sed命令使用 | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/26/linux-cmd-sed/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sed命令使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-09-26 17:22:24" itemprop="dateCreated datePublished" datetime="2016-09-26T17:22:24+08:00">2016-09-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-13 09:54:31" itemprop="dateModified" datetime="2020-01-13T09:54:31+08:00">2020-01-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="sed命令格式"><a href="#sed命令格式" class="headerlink" title="sed命令格式"></a>sed命令格式</h2><blockquote>
+<p><code>sed</code> 命令行格式为： <code>sed</code> [选项] <code>command</code> 输入文本<br><code>sed</code> 命令并不会改变源文件的内容。<code>sed</code> 把每一行都存在临时缓存区中，对这个副本进行编辑，所以不会修改或破坏源文件。</p>
+</blockquote>
+<p>测试文件<code>testsed</code>内容 </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">northwest       NW      Charles Main    3.0     .98     3       34  </span><br><span class="line">northwest       NW      Charles Main    3.0     .98     3       34  </span><br><span class="line">western         WE      Sharon Gray     5.3     .97     5       23  </span><br><span class="line">southwest       SW      Lewis Dalsass   2.7     .8      2       18  </span><br><span class="line">southern        SO      Suan Chin       5.1     .95     4       15  </span><br><span class="line">southeast       SE      Patricia Hemenway       4.0     .7      4       17  </span><br><span class="line">eastern         EA      TB Savage       4.4     .84     5       20  </span><br><span class="line">northeast       NE      AM Main Jr.     5.1     .94     3       13    </span><br><span class="line">northeast       NE      AM Main Jr.     5.1     .94     3       13  </span><br><span class="line">north           NO      Margot Weber    4.5     .89     5       9  </span><br><span class="line">north           NO      Margot Weber    4.5     .89     5       9  </span><br><span class="line">central         CT      Ann Stephens    5.7     .94     5       13</span><br></pre></td></tr></table></figure>
+
+<h3 id="命令详情"><a href="#命令详情" class="headerlink" title="命令详情"></a>命令详情</h3><h4 id="option"><a href="#option" class="headerlink" title="option"></a>option</h4><p>-n 使用安静(silent)模式，只列出经过sed特殊处理的那一行(或者动作)内容；<br>-e 直接在指令列模式上进行 sed 的动作编辑；<br>-f 直接将 sed 的动作写在一个文件内， -f filename 则可以执行filename内的sed命令；<br>-r 让sed命令支持扩展的正则表达式(默认是基础正则表达式)；<br>-i 直接修改读取的文件内容，而不是由屏幕输出；   </p>
+<h4 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h4><p>a \： 即append追加字符串，可将其后的字符加在所选择内容的后面<br>c \： 取代/替换字符串，可将其后内容替换至所选内容<br>d  ： 即delete删除，该命令会将当前选中的行删除<br>i \： 即insert插入字符串，可将其后内容插入至所选内容前<br>p  ： print即打印，该命令会打印当前选择的行到屏幕上<br>s  ： 替换，通常s命令的用法是这样的：1，2s/old/new/g，将old字符串替换成new字符串   </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sed '/north/p' testsed    #打印源文件内容，并打印匹配的内容</span><br><span class="line">sed -n '/north/p' testsed    #只打印匹配north的行</span><br><span class="line">sed -n '3d' testsed    #不打印第三行</span><br><span class="line">sed -n '3,$d' testsed    #不打印第三行开始到结束行</span><br><span class="line">sed -n '3,+5p' testsed    #从第三行打印到第八行</span><br><span class="line">sed -n '/north/d' testsed    #不打印包含north的行</span><br><span class="line">sed -n 's/west/north/g' testsed    #将west替换为north后打印</span><br><span class="line">sed -n 's/^west/north/p' testsed    #将行首的west并替换成 north打印</span><br><span class="line">sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config    #直接替换</span><br><span class="line">sed -r 's/^.//g' nohup.out    #删除每行的第一个字符</span><br><span class="line">sed 's/\(.*\)is\(.*\)null\(.*\)/\1\2/g' nohup.out    #匹配null左右两边</span><br><span class="line">sed -n '/%%/!'p  rabbitmq.config |tr -s '\n'   #去除注释行和空行。</span><br><span class="line">sed -n '/#/!'p  redis.conf |tr -s '\n'   #去除注释行和空行。</span><br><span class="line">sed -n '/alldios/,+4p' nohup.out    #匹配含有alldios的行，并且向下扩展4行。 </span><br><span class="line">nl /etc/passwd | sed '2a drink tea'     #第二行添加drink tea字符串</span><br><span class="line">nl /etc/passwd | sed '2, 5c No 2-5 number'    #第2到5行替换为No 2-5 number</span><br><span class="line">nl /etc/passwd | sed -e '2,5d'   #删除2到5行</span><br></pre></td></tr></table></figure>
+
+<h3 id="sed命令和awk命令合用的话效果拔群，awk常用命令如下"><a href="#sed命令和awk命令合用的话效果拔群，awk常用命令如下" class="headerlink" title="sed命令和awk命令合用的话效果拔群，awk常用命令如下"></a>sed命令和awk命令合用的话效果拔群，awk常用命令如下</h3><table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$0</td>
+<td>当前记录（作为单个变量)</td>
+</tr>
+<tr>
+<td>$1~$n</td>
+<td>当前记录的第n个字段，字段间由FS分隔</td>
+</tr>
+<tr>
+<td>FS</td>
+<td>输入字段分隔符默认是空格</td>
+</tr>
+<tr>
+<td>NF</td>
+<td>当前记录中的字段个数，就是有多少列</td>
+</tr>
+<tr>
+<td>NR</td>
+<td>已经读出的记录数，就是行号，从1开始</td>
+</tr>
+<tr>
+<td>RS</td>
+<td>输入的记录他隔符默认为换行符</td>
+</tr>
+<tr>
+<td>OFS</td>
+<td>输出字段分隔符默认也是空格</td>
+</tr>
+<tr>
+<td>ORS</td>
+<td>输出的记录分隔符，默认为换行符</td>
+</tr>
+<tr>
+<td>ARGC</td>
+<td>命令行参数个数</td>
+</tr>
+<tr>
+<td>ARGV</td>
+<td>命令行参数数组</td>
+</tr>
+<tr>
+<td>FILENAME</td>
+<td>当前输入文件的名字</td>
+</tr>
+<tr>
+<td>IGNORECASE</td>
+<td>如果为真，则进行忽略大小写的匹配</td>
+</tr>
+<tr>
+<td>ARGIND</td>
+<td>当前被处理文件的ARGV标志符</td>
+</tr>
+<tr>
+<td>CONVFMT</td>
+<td>数字转换格式%.6g</td>
+</tr>
+<tr>
+<td>ENVIRON</td>
+<td>UNIX环境变量</td>
+</tr>
+<tr>
+<td>ERRNO</td>
+<td>UNIX系统错误消息</td>
+</tr>
+<tr>
+<td>FIELDWIDTHS</td>
+<td>输入字段宽度的空白分隔字符串</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td>当前记录数</td>
+</tr>
+<tr>
+<td>OFMT</td>
+<td>数字的输出格式%.6g</td>
+</tr>
+<tr>
+<td>RSTART</td>
+<td>被匹配函数匹配的字符串首</td>
+</tr>
+<tr>
+<td>RLENGTH</td>
+<td>被匹配函数匹配的字符串长度</td>
+</tr>
+<tr>
+<td>SUBSEP</td>
+<td>\034</td>
+</tr>
+</tbody></table>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">awk -F ':' '&#123;print $1&#125;' nohup.out    #使用\:分隔行并且打印第一列内容。</span><br><span class="line">awk -F '[()]' '&#123;print $1, $2, $3&#125;' nohup.out    #在-F参数中使用一对方括号来指定多个分隔符，awk 处理 nohup.out 文件时就会使用 "(" 和 ")" 来对文件的每一行进行分割。</span><br><span class="line">awk 'BEGIN&#123;FS=":"&#125;/^root/&#123;print $1,$NF&#125;' /etc/passwd    #FS为字段分隔符，可以自己设置，默认是空格，因为passwd里面是”:”分隔，所以需要修改默认分隔符。</span><br><span class="line">awk 'BEGIN&#123;FS=":";OFS="^^"&#125;/^root/&#123;print FNR,$1,$NF&#125;' /etc/passwd    #OFS设置默认字段分隔符</span><br><span class="line">awk '/^http-nio-80-/&#123;print $0&#125;' nohup.out    #匹配有http-nio-80-开头的行。</span><br><span class="line">awk -F ' ' '&#123;print $1,$2,$3&#125;' nohup.out | sed -n '1,+15p'    #匹配字符串</span><br><span class="line">netstat -anlp|grep 80|grep tcp|awk '&#123;print $5&#125;'|awk -F: '&#123;print $1&#125;'|sort|uniq -c|sort -nr|head -n 20    #查看链接最多的IP</span><br></pre></td></tr></table></figure>
+
+<p>更多操作见<a href="https://www.cnblogs.com/ginvip/p/6376049.html" target="_blank" rel="noopener">链接</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/09/24/server-docker/" rel="prev" title="docker使用记录">
+      <i class="fa fa-chevron-left"></i> docker使用记录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/09/28/linux-cmd-tee/" rel="next" title="tee命令使用">
+      tee命令使用 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sed命令格式"><span class="nav-number">1.</span> <span class="nav-text">sed命令格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令详情"><span class="nav-number">1.1.</span> <span class="nav-text">命令详情</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#option"><span class="nav-number">1.1.1.</span> <span class="nav-text">option</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#命令"><span class="nav-number">1.1.2.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed命令和awk命令合用的话效果拔群，awk常用命令如下"><span class="nav-number">1.2.</span> <span class="nav-text">sed命令和awk命令合用的话效果拔群，awk常用命令如下</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

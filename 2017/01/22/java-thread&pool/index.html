@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="线程的六种状态:NEW线程刚创建, 尚未启动 RUNNABLE线程正在虚拟机正常运行中, 当然可能会有某种耗时计算&#x2F;IO等待的操作&#x2F;CPU时间片切换等, 这个状态下发生的等待一般是其他系统资源, 而不是锁, Sleep等 BLOCKED这个状态下, 是在多个线程有同步操作的场景, 比如正在等待另一个线程的 synchronized 块的执行释放, 或者可重入的 synchronized 块里别人调">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java线程">
+<meta property="og:url" content="http://yoursite.com/2017/01/22/java-thread&pool/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="线程的六种状态:NEW线程刚创建, 尚未启动 RUNNABLE线程正在虚拟机正常运行中, 当然可能会有某种耗时计算&#x2F;IO等待的操作&#x2F;CPU时间片切换等, 这个状态下发生的等待一般是其他系统资源, 而不是锁, Sleep等 BLOCKED这个状态下, 是在多个线程有同步操作的场景, 比如正在等待另一个线程的 synchronized 块的执行释放, 或者可重入的 synchronized 块里别人调">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fnbzmai8yrj30dw08574s.jpg">
+<meta property="article:published_time" content="2017-01-22T01:07:21.000Z">
+<meta property="article:modified_time" content="2020-01-13T01:54:31.299Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ws1.sinaimg.cn/large/006tNbRwgy1fnbzmai8yrj30dw08574s.jpg">
+
+<link rel="canonical" href="http://yoursite.com/2017/01/22/java-thread&pool/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>java线程 | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/22/java-thread&pool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java线程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-01-22 09:07:21" itemprop="dateCreated datePublished" datetime="2017-01-22T09:07:21+08:00">2017-01-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-13 09:54:31" itemprop="dateModified" datetime="2020-01-13T09:54:31+08:00">2020-01-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="线程的六种状态"><a href="#线程的六种状态" class="headerlink" title="线程的六种状态:"></a>线程的六种状态:</h2><h3 id="NEW"><a href="#NEW" class="headerlink" title="NEW"></a>NEW</h3><p>线程刚创建, 尚未启动</p>
+<h3 id="RUNNABLE"><a href="#RUNNABLE" class="headerlink" title="RUNNABLE"></a>RUNNABLE</h3><p>线程正在虚拟机正常运行中, 当然可能会有某种耗时计算/IO等待的操作/CPU时间片切换等, 这个状态下发生的等待一般是其他系统资源, 而不是锁, Sleep等</p>
+<h3 id="BLOCKED"><a href="#BLOCKED" class="headerlink" title="BLOCKED"></a>BLOCKED</h3><p>这个状态下, 是在多个线程有同步操作的场景, 比如正在等待另一个线程的 synchronized 块的执行释放, 或者可重入的 synchronized 块里别人调用wait() 方法, 也就是这里是线程在等待进入临界区</p>
+<h3 id="WAITING"><a href="#WAITING" class="headerlink" title="WAITING"></a>WAITING</h3><p>这个状态下是指线程拥有了某个锁之后, 调用了他的wait方法, 等待其他线程/锁拥有者调用 notify / notifyAll 一遍该线程可以继续下一步操作,<br> 这里要区分 BLOCKED 和 WATING 的区别, <strong>一个是在临界点外面等待进入, 一个是在临界点里面wait等待别人notify</strong>， 线程调用了另外一个线程（THREAD-OTHER）的join方法, 也会进入WAITING状态, 等待（THREAD-OTHER）的线程执行结束</p>
+<h3 id="TIMED-WAITING"><a href="#TIMED-WAITING" class="headerlink" title="TIMED_WAITING"></a>TIMED_WAITING</h3><p>这个状态就是有限的(时间限制)的WAITING, 一般出现在调用wait(long), join(long)等情况下, 另外情况就是一个线程sleep后, 也会进入TIMED_WAITING状态</p>
+<h3 id="TERMINATED"><a href="#TERMINATED" class="headerlink" title="TERMINATED"></a>TERMINATED</h3><p>这个状态下表示 该线程的run方法已经执行完毕了, 基本上就等于死亡了(当时如果线程被持久持有, 可能不会被回收)</p>
+<h3 id="守护进程"><a href="#守护进程" class="headerlink" title="守护进程"></a>守护进程</h3><p>deamon是一种运行在后台的一种特殊的进程，它独立于控制终端并且周期性的执行某种任务或等待处理某些发生的事件。由于在Linux中，<strong>每个系统与用户进行交流的界面成为终端</strong>，每一个从此终端开始运行的进程都会依附于这个终端，这个终端被称为这些进程的控制终端，当控制终端被关闭的时候，相应的进程都会自动关闭。<br>但是守护进程却能突破这种限制，它脱离于终端并且在后台运行，并且它脱离终端的目的是为了避免进程在运行的过程中的信息在任何终端中显示并且进程也不会被任何终端所产生的终端信息所打断。它从被执行的时候开始运转，直到整个系统关闭才退出(当然可以人为的杀死相应的守护进程)。如果想让某个进程不因为用户或中断或其他变化而影响，那么就必须把这个进程变成一个守护进程。</p>
+<h3 id="守护线程和非守护线程"><a href="#守护线程和非守护线程" class="headerlink" title="守护线程和非守护线程"></a>守护线程和非守护线程</h3><p>Daemon的作用是为其他线程的运行提供服务，比如说GC线程。User Thread线程和Daemon Thread守护线程本质上来说去没啥区别，唯一的区别之处就在虚拟机的离开：如果User Thread全部撤离，那么Daemon Thread也就没啥线程好服务的了，所以虚拟机也就退出了。</p>
+<ul>
+<li>1）、thread.setDaemon(true)必须在thread.start()之前设置，否则会跑出一个IllegalThreadStateException异常。你不能把正在运行的常规线程设置为守护线程。  （备注：这点与守护进程有着明显的区别，守护进程是创建后，让进程摆脱原会话的控制+让进程摆脱原进程组的控制+让进程摆脱原控制终端的控制；所以说寄托于虚拟机的语言机制跟系统级语言有着本质上面的区别）</li>
+<li>2）、在Daemon线程中产生的新线程也是Daemon的。  （这一点又是有着本质的区别了：守护进程fork()出来的子进程不再是守护进程，尽管它把父进程的进程相关信息复制过去了，但是子进程的进程的父进程不是init进程，所谓的守护进程本质上说就是“父进程挂掉，init收养，然后文件0,1,2都是/dev/null，当前目录到/”）</li>
+</ul>
+<h2 id="Java通过Executors提供四种线程池，分别为："><a href="#Java通过Executors提供四种线程池，分别为：" class="headerlink" title="Java通过Executors提供四种线程池，分别为："></a>Java通过Executors提供四种线程池，分别为：</h2><h3 id="1、newCachedThreadPool"><a href="#1、newCachedThreadPool" class="headerlink" title="1、newCachedThreadPool"></a>1、newCachedThreadPool</h3><p>创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。（线程最大并发数不可控制）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                                      <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                                      <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2、newFixedThreadPool"><a href="#2、newFixedThreadPool" class="headerlink" title="2、newFixedThreadPool"></a>2、newFixedThreadPool</h3><p>创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">                                      <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                      <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3、newScheduledThreadPool"><a href="#3、newScheduledThreadPool" class="headerlink" title="3、newScheduledThreadPool"></a>3、newScheduledThreadPool</h3><p>创建一个定长线程池，支持定时及周期性任务执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newScheduledThreadPool</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ScheduledThreadPoolExecutor(corePoolSize);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">              <span class="keyword">new</span> DelayedWorkQueue())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">             Executors.defaultThreadFactory(), defaultHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4、newSingleThreadExecutor"><a href="#4、newSingleThreadExecutor" class="headerlink" title="4、newSingleThreadExecutor"></a>4、newSingleThreadExecutor</h3><p>创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">            (<span class="keyword">new</span> ThreadPoolExecutor(<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">                                    <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                    <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ThreadPoolExecutor的构造方法参数"><a href="#ThreadPoolExecutor的构造方法参数" class="headerlink" title="ThreadPoolExecutor的构造方法参数"></a>ThreadPoolExecutor的构造方法参数</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              ThreadFactory threadFactory,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="构造方法参数解释"><a href="#构造方法参数解释" class="headerlink" title="构造方法参数解释"></a>构造方法参数解释</h3><ul>
+<li>1 corePoolSize 维持的最小的活动线程的数量<br>当提交一个任务到线程池时，如果总线程数量小于corePoolSize，线程会继续创建新线程来执行任务。除非您设置了allowCoreThreadTimeOut属性（默认为false）。</li>
+<li>2 maximumPoolSize 线程池的最大数量<br>所需线程数大于corePoolSize<code>&amp;&amp;</code>阻塞队列已满 会继续创建线程直到maximumPoolSize </li>
+<li>3 keepAliveTime 空闲线程存活时间<br>如果当前线程数量大于corePoolSize，超出的<code>&amp;&amp;</code>空闲时间大于keepAliveTime的 则会终止。</li>
+<li>4 unit 时间单位  </li>
+<li>5 workQueue 任务队列<br>用于保存等待执行的任务的阻塞队列。一个阻塞队列，用来存储等待执行的任务</li>
+<li>6 threadFactory 用于设置创建线程的工厂<br>可以通过线程工厂给每个创建出来的线程设置更有意义的名字</li>
+<li>7 handler 饱和策略（四种ThreadPoolExcutor的饱和策略）<br>ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。<br>ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。<br>ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）<br>ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务</li>
+</ul>
+<h3 id="处理流程"><a href="#处理流程" class="headerlink" title="处理流程"></a>处理流程</h3><p>当提交一个任务到线程池时它的执行流程是怎样的呢？</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fnbzmai8yrj30dw08574s.jpg" alt=""></p>
+<blockquote>
+<p>首先第一步会判断核心线程数有没有达到上限，如果没有则创建线程(会获取全局锁)，满了则会将任务丢进阻塞队列。<br>如果队列也满了则需要判断最大线程数是否达到上限，如果没有则创建线程(获取全局锁)，如果最大线程数也满了则会根据饱和策略处理。<br>常用的饱和策略有:  </p>
+</blockquote>
+<ul>
+<li>直接丢弃任务。     </li>
+<li>调用者线程处理。     </li>
+<li>丢弃队列中的最近任务，执行当前任务。<br>所以当线程池完成预热之后都是将任务放入队列，接着由工作线程一个个从队列里取出执行。     </li>
+</ul>
+<h2 id="合理配置线程池"><a href="#合理配置线程池" class="headerlink" title="合理配置线程池"></a>合理配置线程池</h2><blockquote>
+<p>线程池并不是配置越大越好，而是要根据任务的熟悉来进行划分：<br>如果是 <code>CPU</code> 密集型任务应当分配较少的线程，比如 <code>CPU</code> 个数相当的大小。<br>如果是 IO 密集型任务，IO操作不占用CPU，线程并不是一直在运行，所以可以尽可能的多配置线程，比如 <code>CPU 个数 * 2</code> 。<br>当是一个混合型任务，可以将其拆分为 <code>CPU</code> 密集型任务以及 <code>IO</code> 密集型任务，这样来分别配置。<br>在《linux多线程服务器端编程》中有一个思路，CPU计算和IO的阻抗匹配原则。<br>如果线程池中的线程在执行任务时，密集计算所占的时间比重为P(0&lt;P&lt;=1)，而系统一共有C个CPU，为了让CPU跑满而又不过载，线程池的大小经验公式 T = C / P。<br>在此，T只是一个参考，考虑到P的估计并不是很准确，T的最佳估值可以上下浮动50%。<br>这个经验公式的原理很简单，T个线程，每个线程占用P的CPU时间，如果刚好占满C个CPU,那么必有 T * P = C。<br>下面验证一下边界条件的正确性：<br>假设C = 8，P = 1.0，线程池的任务完全是密集计算，那么T = 8。只要8个活动线程就能让8个CPU饱和，再多也没用了，因为CPU资源已经耗光了。<br>假设C = 8，P = 0.5，线程池的任务有一半是计算，有一半在等IO上，那么T = 16.考虑操作系统能灵活，合理调度sleeping/writing/running线程，那么大概16个“50%繁忙的线程”能让8个CPU忙个不停。<br>启动更多的线程并不能提高吞吐量，反而因为增加上下文切换的开销而降低性能。<br>如果P &lt; 0.2，这个公式就不适用了，T可以取一个固定值，比如 5<em>C。另外公式里的C不一定是CPU总数，可以是“分配给这项任务的CPU数目”，比如在8核机器上分出4个核来做一项任务，那么C=4<br>文章如何合理设置线程池大小里面提到了一个公式：<br>最佳线程数目 = （（线程等待时间+线程CPU时间）/线程CPU时间 ）</em> CPU数目<br>比如平均每个线程CPU运行时间为0.5s，而线程等待时间（非CPU运行时间，比如IO）为1.5s，CPU核心数为8，那么根据上面这个公式估算得到：((0.5+1.5)/0.5)<em>8=32。这个公式进一步转化为：<br>最佳线程数目 = （线程等待时间与线程CPU时间之比 + 1）</em> CPU数目<br>可以得出一个结论：<br>线程等待时间所占比例越高，需要越多线程。线程CPU时间所占比例越高，需要越少线程。<br>以上公式与之前的CPU和IO密集型任务设置线程数基本吻合    </p>
+</blockquote>
+<h2 id="另外的线程池类型"><a href="#另外的线程池类型" class="headerlink" title="另外的线程池类型"></a>另外的线程池类型</h2><h3 id="ScheduledExecutorService（调度线程池）"><a href="#ScheduledExecutorService（调度线程池）" class="headerlink" title="ScheduledExecutorService（调度线程池）"></a>ScheduledExecutorService（调度线程池）</h3><blockquote>
+<p>该线程池致力于定时执行的任务，比如心跳类型的任务。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ScheduledExecutorService executor = Executors.newScheduledThreadPool(<span class="number">5</span>);</span><br><span class="line">    Runnable task = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"...........HeartBeat..........."</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">executor.scheduleAtFixedRate(task, <span class="number">5</span>, <span class="number">3</span>, TimeUnit.SECONDS);</span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/01/16/seo-optimization/" rel="prev" title="搜索引擎优化总结">
+      <i class="fa fa-chevron-left"></i> 搜索引擎优化总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/03/12/fiddler-use-common/" rel="next" title="fidder使用总结">
+      fidder使用总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#线程的六种状态"><span class="nav-number">1.</span> <span class="nav-text">线程的六种状态:</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NEW"><span class="nav-number">1.1.</span> <span class="nav-text">NEW</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RUNNABLE"><span class="nav-number">1.2.</span> <span class="nav-text">RUNNABLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BLOCKED"><span class="nav-number">1.3.</span> <span class="nav-text">BLOCKED</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WAITING"><span class="nav-number">1.4.</span> <span class="nav-text">WAITING</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TIMED-WAITING"><span class="nav-number">1.5.</span> <span class="nav-text">TIMED_WAITING</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TERMINATED"><span class="nav-number">1.6.</span> <span class="nav-text">TERMINATED</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#守护进程"><span class="nav-number">1.7.</span> <span class="nav-text">守护进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#守护线程和非守护线程"><span class="nav-number">1.8.</span> <span class="nav-text">守护线程和非守护线程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java通过Executors提供四种线程池，分别为："><span class="nav-number">2.</span> <span class="nav-text">Java通过Executors提供四种线程池，分别为：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、newCachedThreadPool"><span class="nav-number">2.1.</span> <span class="nav-text">1、newCachedThreadPool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、newFixedThreadPool"><span class="nav-number">2.2.</span> <span class="nav-text">2、newFixedThreadPool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、newScheduledThreadPool"><span class="nav-number">2.3.</span> <span class="nav-text">3、newScheduledThreadPool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、newSingleThreadExecutor"><span class="nav-number">2.4.</span> <span class="nav-text">4、newSingleThreadExecutor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadPoolExecutor的构造方法参数"><span class="nav-number">2.5.</span> <span class="nav-text">ThreadPoolExecutor的构造方法参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法参数解释"><span class="nav-number">2.6.</span> <span class="nav-text">构造方法参数解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理流程"><span class="nav-number">2.7.</span> <span class="nav-text">处理流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合理配置线程池"><span class="nav-number">3.</span> <span class="nav-text">合理配置线程池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#另外的线程池类型"><span class="nav-number">4.</span> <span class="nav-text">另外的线程池类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ScheduledExecutorService（调度线程池）"><span class="nav-number">4.1.</span> <span class="nav-text">ScheduledExecutorService（调度线程池）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

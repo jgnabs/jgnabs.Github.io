@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="字典 type parameter，类型形参。如Collection&lt;Integer&gt;，该声明的类型形参是Integer。 parameterized type，参数化类型。如new Array&lt;Integer&gt;，该调用的参数化类型是Integer。 type variable，类型变量。如类声明public class Canvas&lt;T&gt; ，T就是类型变量。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java泛型">
+<meta property="og:url" content="http://yoursite.com/2019/06/02/java-generics/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="字典 type parameter，类型形参。如Collection&lt;Integer&gt;，该声明的类型形参是Integer。 parameterized type，参数化类型。如new Array&lt;Integer&gt;，该调用的参数化类型是Integer。 type variable，类型变量。如类声明public class Canvas&lt;T&gt; ，T就是类型变量。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-06-02T01:07:21.000Z">
+<meta property="article:modified_time" content="2020-01-14T06:40:08.062Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/06/02/java-generics/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>java泛型 | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/02/java-generics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java泛型
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-06-02 09:07:21" itemprop="dateCreated datePublished" datetime="2019-06-02T09:07:21+08:00">2019-06-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-01-14 14:40:08" itemprop="dateModified" datetime="2020-01-14T14:40:08+08:00">2020-01-14</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><ul>
+<li><code>type parameter</code>，类型形参。如<code>Collection&lt;Integer&gt;</code>，该声明的类型形参是<code>Integer</code>。</li>
+<li><code>parameterized type</code>，参数化类型。如<code>new Array&lt;Integer&gt;</code>，该调用的参数化类型是<code>Integer</code>。</li>
+<li><code>type variable</code>，类型变量。如类声明<code>public class Canvas&lt;T&gt;</code> ，<code>T</code>就是类型变量。</li>
+</ul>
+<h2 id="什么是泛型"><a href="#什么是泛型" class="headerlink" title="什么是泛型"></a>什么是泛型</h2><blockquote>
+<p>泛型是从J2SE 5.0引入的一个增强特性，允许类型和方法操作各种类型的对象同时提供编译时类型的安全性检查。另外也增加了集合编译时类型的安全性检查，消除了之前需强制转换的繁重工作。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List myIntList &#x3D; new LinkedList(); &#x2F;&#x2F; 1</span><br><span class="line">myIntList.add(new Integer(0)); &#x2F;&#x2F; 2</span><br><span class="line">Integer x &#x3D; (Integer) myIntList.iterator().next(); &#x2F;&#x2F; 3</span><br></pre></td></tr></table></figure>
+
+<p>如上述代码，第3行是很烦人的，通常情况下，开发者知道何种类型的数据会被添加到集合，但是强制转换还是必须的，因为编译器只会保证<code>iterator()</code>方法返回的是一个对象。<br>然而为了保证对<code>Integer x</code>的赋值是正确的，还是需要进行一次强制类型转换。<br>这样除了带来无关逻辑的混乱，还有可能导致运行时异常，因为开发者是会出错的。</p>
+<p>使用泛型优化后的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; myIntList &#x3D; new LinkedList&lt;Integer&gt;(); &#x2F;&#x2F; 1&#39;</span><br><span class="line">myIntList.add(new Integer(0)); &#x2F;&#x2F; 2&#39;</span><br><span class="line">Integer x &#x3D; myIntList.iterator().next(); &#x2F;&#x2F; 3&#39;</span><br></pre></td></tr></table></figure>
+
+<p>我们为泛型集合接口<code>List</code>传入了一个类型形参（<code>Type Parameter</code>）<code>Integer</code>，不仅去除了强制转换，也告诉开发人员和编译器该<code>List</code>存储的类型，也使得编译器可以在编译时进行类型的安全检查。</p>
+<h2 id="泛类和子类"><a href="#泛类和子类" class="headerlink" title="泛类和子类"></a>泛类和子类</h2><p>下述代码会出现问题吗？相信很多不了解泛型的人员都会回答没有问题。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; ls &#x3D; new ArrayList&lt;String&gt;(); &#x2F;&#x2F; 1</span><br><span class="line">List&lt;Object&gt; lo &#x3D; ls; &#x2F;&#x2F; 2</span><br></pre></td></tr></table></figure>
+
+<p>这个问题的争议点就是：<code>List&lt;String&gt;</code>是不是<code>List&lt;Object&gt;</code>？     </p>
+<p>如果有人回答是的话，请看下述的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lo.add(new Object()); &#x2F;&#x2F; 3</span><br><span class="line">String s &#x3D; ls.get(0); &#x2F;&#x2F; 4: 尝试将一个对象赋值给一个字符引用</span><br></pre></td></tr></table></figure>
+
+<p>答案是：会出问题，如果编译时不出问题的话，运行时也会出现问题。<strong>事实上，编译器在编译期间就会提示编译错误</strong>。</p>
+<p>所以<code>List&lt;String&gt;</code>不是<code>List&lt;Object&gt;</code>的子类型，也就不是<code>List&lt;Object&gt;</code>。如此，泛型是来解决遗留问题的，不是而产生问题的，理解泛型就要有这个认知。</p>
+<h2 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h2><p>对比如下两段代码，它们需要打印了一个集合的所有元素，哪一种更有效？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">void printCollection(Collection c) &#123;</span><br><span class="line">    Iterator i &#x3D; c.iterator();</span><br><span class="line">    for (k &#x3D; 0; k &lt; c.size(); k++) &#123;</span><br><span class="line">        System.out.println(i.next());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">void printCollection(Collection&lt;Object&gt; c) &#123;</span><br><span class="line">    for (Object e : c) &#123;</span><br><span class="line">        System.out.println(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>答案是：第一种更有效。尽管第二种引入了泛型，然而第一种可以接受任何类型的集合进行迭代，第二种则只会接受<code>Collection&lt;Object&gt;</code>。<br>如上一节所讲，<code>Collection&lt;Object&gt;</code>不是所有集合的超类，它不能接受<code>Collection&lt;String&gt;</code>或<code>Collection&lt;Integer&gt;</code>。</p>
+<p>那么，如何使用泛型代表所有集合的超类，答案就是 <code>Collection&lt;?&gt;</code>，读作未知类集合，即可以存储任何元素类型的集合，该方式叫做通配符类型。</p>
+<p>现在我们就可以使用通配符类型来匹配各种类型的集合， 并且享受编译时类型安全检查的好处。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;?&gt; c &#x3D; new ArrayList&lt;String&gt;(); &#x2F;&#x2F;line 1</span><br><span class="line">&#x2F;&#x2F; Collection&lt;?&gt; c &#x3D; new ArrayList&lt;&gt;(); &#x2F;&#x2F;line 2</span><br><span class="line">c.add(new Object()); &#x2F;&#x2F; 编译异常</span><br><span class="line">c.add(null);</span><br></pre></td></tr></table></figure>
+
+<p>现在我们不知道<code>c</code>的元素类型代表什么，所以我们不能把<code>Object</code>添加进去。而<code>add</code>方法只接受<code>E</code>类型的元素，即<code>String</code>元素。<br>如果把<code>line 1</code>替换为<code>line 2</code>，则add接受的则必须是<code>?</code>（unknown）的类或子类，但是我们不知道unknown的类型，所以我们也不能添加任何类型的元素，除了<code>null</code>，因为<code>null</code>是所有类型的成员。</p>
+<h3 id="边界通配符"><a href="#边界通配符" class="headerlink" title="边界通配符"></a>边界通配符</h3><p>看下面一段代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public abstract class Shape &#123;</span><br><span class="line">    public abstract void draw(Canvas c);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Circle extends Shape &#123;</span><br><span class="line">    private int x, y, radius;</span><br><span class="line">    public void draw(Canvas c) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Rectangle extends Shape &#123;</span><br><span class="line">    private int x, y, width, height;</span><br><span class="line">    public void draw(Canvas c) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Canvas &#123;</span><br><span class="line">    public void draw(Shape s) &#123;</span><br><span class="line">        s.draw(this);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void drawAll(List&lt;Shape&gt; shapes) &#123;</span><br><span class="line">    for (Shape s: shapes) &#123;</span><br><span class="line">        s.draw(this);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于前几节所讲，<code>drawAll</code>可以写入<code>List&lt;Shape&gt;</code>，但不可以写入<code>List&lt;Rectangle&gt;</code>或者<code>List&lt;Circle&gt;</code>，那么如果实现可以写入后两者呢？</p>
+<p>答案就是使用边界统配符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public void drawAll(List&lt;? extends Shape&gt; shapes) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>List&lt;? extends Shape&gt;</code>就是边界通配符的一个例子，<code>?</code>代表的还是unknown，即unknown必须是<code>Shape</code>或子类。我们称之为<code>Shape</code>是通配符的上边界。<br>当然<code>List&lt;Rectangle&gt;</code>或<code>List&lt;Circle&gt;</code>是符合的，因为<code>Rectangle</code>和<code>Circle</code>是<code>Shape</code>的子类。</p>
+<p>当然这是有代价的，比如下面的<code>addRectangle</code>方法会出现编译错误，因为我们不知道<code>?</code>的类型，所以我们也不知道<code>?</code>是不是<code>Rectangle</code>的父类，所以该操作就不允许。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">public void addRectangle(List&lt;? extends Shape&gt; shapes) &#123;</span><br><span class="line">    &#x2F;&#x2F; Compile-time error!</span><br><span class="line">    shapes.add(0, new Rectangle());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="泛型方法"><a href="#泛型方法" class="headerlink" title="泛型方法"></a>泛型方法</h2><p>现在书写一个程序将一个对象数组放置到一个集合中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static void fromArrayToCollection(Object[] a, Collection&lt;?&gt; c) &#123;</span><br><span class="line">    for (Object o : a) &#123; </span><br><span class="line">        c.add(o); &#x2F;&#x2F; 编译时异常</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述程序还是犯了一个初学泛型的错误。不能将一个对象添加到<code>?</code>(unknown)的集合中。</p>
+<p>解决该问题的方式就是使用泛型方法，就像类型声明一样，方法也有泛型声明，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">static &lt;T&gt; void fromArrayToCollection(T[] a, Collection&lt;T&gt; c) &#123;</span><br><span class="line">    for (T o : a) &#123;</span><br><span class="line">        c.add(o); &#x2F;&#x2F; Correct</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们就可以调用该方法，只要数组的元素类型是集合类型的<code>T</code>或子类即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">Object[] oa &#x3D; new Object[100];</span><br><span class="line">Collection&lt;Object&gt; co &#x3D; new ArrayList&lt;Object&gt;();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; T 被推断为 Object</span><br><span class="line">fromArrayToCollection(oa, co); </span><br><span class="line"></span><br><span class="line">String[] sa &#x3D; new String[100];</span><br><span class="line">Collection&lt;String&gt; cs &#x3D; new ArrayList&lt;String&gt;();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; T 被推断为 String</span><br><span class="line">fromArrayToCollection(sa, cs);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; T 被推断为 Object</span><br><span class="line">fromArrayToCollection(sa, co);</span><br><span class="line"></span><br><span class="line">Integer[] ia &#x3D; new Integer[100];</span><br><span class="line">Float[] fa &#x3D; new Float[100];</span><br><span class="line">Number[] na &#x3D; new Number[100];</span><br><span class="line">Collection&lt;Number&gt; cn &#x3D; new ArrayList&lt;Number&gt;();</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; T 被推断为 Number</span><br><span class="line">fromArrayToCollection(ia, cn);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; T 被推断为 Number</span><br><span class="line">fromArrayToCollection(fa, cn);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; T 被推断为 Number</span><br><span class="line">fromArrayToCollection(na, cn);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; T 被推断为 Object</span><br><span class="line">fromArrayToCollection(na, co);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 编译异常</span><br><span class="line">fromArrayToCollection(na, cs);</span><br></pre></td></tr></table></figure>
+
+<p>编译器会自动推断较为具体的类型以保证调用的类型正确。</p>
+<p>那么我们该如何在泛型方法和通配符类型中选择呢？我们看一下<code>API</code>中的<code>Collection</code>的方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface Collection&lt;E&gt; &#123;</span><br><span class="line">    public boolean containsAll(Collection&lt;?&gt; c);</span><br><span class="line">    public boolean addAll(Collection&lt;? extends E&gt; c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为什么官方不使用如下的泛型方法取代呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">interface Collection&lt;E&gt; &#123;</span><br><span class="line">    public &lt;T&gt; boolean containsAll(Collection&lt;T&gt; c);</span><br><span class="line">    public &lt;T extends E&gt; boolean addAll(Collection&lt;T&gt; c);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在<code>containsAll</code>,<code>addAll</code>方法中，类型形参<code>T</code>只被使用了一次，并且返回值与<code>T</code>没有任何的依赖关系。这种场景单纯就是告诉我们类型参数只是用来进行多态的使用，<br>它唯一的作用就是让实参类型更加的多样化，这种情况使用<code>?</code>通配符则是最好的方式。</p>
+<p><strong>通配符设计就是为了更加灵活的子类型使用</strong></p>
+<p>泛型方法允许使用类型形参来表示方法的形参和返回值类型的关系。如果没有类似的依赖关系，则不应该使用泛型方法。</p>
+<p>当然它们也可以一起同时使用，比如<code>Collections.copy()</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Collections &#123;</span><br><span class="line">    public static &lt;T&gt; void copy(List&lt;T&gt; dest, List&lt;? extends T&gt; src) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是两个形参的依赖关系，<code>src</code>的元素类型必须是可分配给<code>dest</code>的元素类型<code>T</code>的，所以<code>src</code>的元素类型必须是<code>T</code>或者子类。<br><code>copy</code>方法的签名就表明了这种依赖关系。</p>
+<p>当然我们可以换一种写法，完全不使用通配符。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Collections &#123;</span><br><span class="line">    public static &lt;T, S extends T&gt; void copy(List&lt;T&gt; dest, List&lt;S&gt; src) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样也是可以的，但是当<code>T</code>在<code>dest</code>和<code>src</code>中都使用了，<code>S</code>则只使用了一次，它并没有依赖关系。这就是可以把<code>S</code>替换为<code>?</code>的信号。<br>这就是该如何选择通配符和泛型方法两者使用的依据。</p>
+<h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2><h3 id="泛型类被所有的调用共享"><a href="#泛型类被所有的调用共享" class="headerlink" title="泛型类被所有的调用共享"></a>泛型类被所有的调用共享</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List &lt;String&gt; l1 &#x3D; new ArrayList&lt;String&gt;();</span><br><span class="line">List&lt;Integer&gt; l2 &#x3D; new ArrayList&lt;Integer&gt;();</span><br><span class="line">System.out.println(l1.getClass() &#x3D;&#x3D; l2.getClass()); &#x2F;&#x2F;line 1</span><br></pre></td></tr></table></figure>
+<p><code>line 1</code>的输出是<code>true</code>，因为所有的泛型实例都有相同的运行期类型，不管它们的真实类型形参是什么。</p>
+<p>这也定义了什么是泛型：即它会对所有可能的类型形参都具有相同的行为。<strong>可以理解为同一个类可以有不同的类型型参</strong>。<br>我们知道类的静态变量和静态方法在所有的实例之中共享，这也是无论在静态方法或初始值设定项中，静态变量声明或初始值设定项中引用类型声明的类型形参是非法的。<br>因为没有实例化之前，不知道静态代码中引用的类型形参<code>T</code>是什么类型。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Canvas&lt;T&gt;</span><br><span class="line">&#123;</span><br><span class="line">	static T t; &#x2F;&#x2F;编译报错</span><br><span class="line">	T t1;</span><br><span class="line">  </span><br><span class="line">	static &#123;</span><br><span class="line">		T t3; &#x2F;&#x2F;编译报错</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="类型转换和实例判断"><a href="#类型转换和实例判断" class="headerlink" title="类型转换和实例判断"></a>类型转换和实例判断</h3><p>如上所述，还有一个隐喻的事实就是，泛型类被所有的实例共享，也就是说判断一个实例是不是泛型类的某种调用就是毫无意义的。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Collection cs &#x3D; new ArrayList&lt;String&gt;();</span><br><span class="line">&#x2F;&#x2F; 不合法.</span><br><span class="line">if (cs instanceof Collection&lt;String&gt;) &#123; ... &#125;</span><br><span class="line"></span><br><span class="line">类似，还有下面叙述的转换</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; Unchecked warning,</span><br><span class="line">Collection&lt;String&gt; cstr &#x3D; (Collection&lt;String&gt;) cs;</span><br></pre></td></tr></table></figure>
+
+<p>类似的，还有类型变量。如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; Unchecked warning. </span><br><span class="line">&lt;T&gt; T badCast(T t, Object o) &#123;</span><br><span class="line">    return (T) o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际上，<strong>类型变量在运行期是不存在的</strong>，这意味着它们在时间和空间上都不需要性能开销，这很好。不幸的是，这也意味着类型转换中不能可靠地使用它们。</p>
+<h2 id="类字面量作为运行时类型标记"><a href="#类字面量作为运行时类型标记" class="headerlink" title="类字面量作为运行时类型标记"></a>类字面量作为运行时类型标记</h2><p><code>Class</code>类也变成了泛型， 这是除了容器以外泛型的一个重要应用。<br><code>Class&lt;T&gt;</code>中的<code>T</code>代表的什么，<code>T</code>代表的是<code>class</code>所要表示的对象。<br>如<code>String.class</code>的类型是<code>Class&lt;String&gt;</code>。<code>Serializable.class</code> 的类型时<code>Class&lt;Serializable&gt;</code>。<br><code>String.class</code>类字面量，作为类型<code>Class&lt;String&gt;</code>的标记。</p>
+<p>很自然的我们可以使用类字面量作为工厂对象被反射使用，如下述例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Collection emps &#x3D; sqlUtility.select(EmpInfo.class, &quot;select * from emps&quot;);</span><br><span class="line">...</span><br><span class="line">public static Collection select(Class c, String sqlStatement) &#123; </span><br><span class="line">    Collection result &#x3D; new ArrayList();</span><br><span class="line">    &#x2F;* Run sql query using jdbc. *&#x2F;</span><br><span class="line">    for (&#x2F;* Iterate over jdbc results. *&#x2F; ) &#123; </span><br><span class="line">        Object item &#x3D; c.newInstance(); </span><br><span class="line">        &#x2F;* Use reflection and set all of item&#39;s</span><br><span class="line">         * fields from sql results. </span><br><span class="line">         *&#x2F;  </span><br><span class="line">        result.add(item); </span><br><span class="line">    &#125; </span><br><span class="line">    return result; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是这种方式不能完全返回我们想要的精确类型的集合，但现在<code>Class</code>引入了泛型。我们可以使用如下的方式代替：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Collection&lt;EmpInfo&gt; </span><br><span class="line">    emps &#x3D; sqlUtility.select(EmpInfo.class, &quot;select * from emps&quot;);</span><br><span class="line">...</span><br><span class="line">public static &lt;T&gt; Collection&lt;T&gt; select(Class&lt;T&gt; c, String sqlStatement) &#123; </span><br><span class="line">    Collection&lt;T&gt; result &#x3D; new ArrayList&lt;T&gt;();</span><br><span class="line">    &#x2F;* Run sql query using jdbc. *&#x2F;</span><br><span class="line">    for (&#x2F;* Iterate over jdbc results. *&#x2F; ) &#123; </span><br><span class="line">        T item &#x3D; c.newInstance(); </span><br><span class="line">        &#x2F;* Use reflection and set all of item&#39;s</span><br><span class="line">         * fields from sql results. </span><br><span class="line">         *&#x2F;  </span><br><span class="line">        result.add(item);</span><br><span class="line">    &#125; </span><br><span class="line">    return result; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="下边界通配符"><a href="#下边界通配符" class="headerlink" title="下边界通配符"></a>下边界通配符</h2><p>看下面一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">interface Sink&lt;T&gt; &#123;</span><br><span class="line">    flush(T t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T&gt; T writeAll(Collection&lt;T&gt; coll, Sink&lt;T&gt; snk) &#123;</span><br><span class="line">    T last;</span><br><span class="line">    for (T t : coll) &#123;</span><br><span class="line">        last &#x3D; t;</span><br><span class="line">        snk.flush(last);</span><br><span class="line">    &#125;</span><br><span class="line">    return last;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Sink&lt;Object&gt; s;</span><br><span class="line">Collection&lt;String&gt; cs;</span><br><span class="line">String str &#x3D; writeAll(cs, s); &#x2F;&#x2F; 错误调用.</span><br></pre></td></tr></table></figure>
+
+<p>上述的<code>writeAll</code>调用是不合法的，她的形参类型都包含类型变量<code>T</code>。这种情况下，<code>T</code>不会被推断为合适的类型。并且<code>String</code>和<code>Object</code>都不满足条件，因为<code>T</code>要为同一类型。<br>如何改写<code>writeAll</code>方法呢？如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static &lt;T&gt; T writeAll(Collection&lt;T&gt; coll, Sink&lt;? super T&gt; snk) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>? super T</code>表示未知类型必须是<code>T</code>类型的父类，这样将可以满足条件。 </p>
+<h3 id="通配符的匹配（wildcard-capture）"><a href="#通配符的匹配（wildcard-capture）" class="headerlink" title="通配符的匹配（wildcard capture）"></a>通配符的匹配（wildcard capture）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;?&gt; unknownSet &#x3D; new HashSet&lt;String&gt;();</span><br><span class="line">class Collections &#123;</span><br><span class="line">    ...</span><br><span class="line">    &lt;T&gt; public static Set&lt;T&gt; unmodifiableSet(Set&lt;T&gt; set) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">Set&lt;?&gt; s &#x3D; Collections.unmodifiableSet(unknownSet);</span><br></pre></td></tr></table></figure>
+<p>上述方式介绍了一种新的特殊规则，同时符合类型安全的策略，即通配符的匹配。即编译器可以把<code>?</code>推断为<code>T</code>。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/02/01/usage-phantomjs/" rel="prev" title="phantomjs使用">
+      <i class="fa fa-chevron-left"></i> phantomjs使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/08/16/CORS/" rel="next" title="跨源请求">
+      跨源请求 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字典"><span class="nav-number">1.</span> <span class="nav-text">字典</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是泛型"><span class="nav-number">2.</span> <span class="nav-text">什么是泛型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛类和子类"><span class="nav-number">3.</span> <span class="nav-text">泛类和子类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通配符"><span class="nav-number">4.</span> <span class="nav-text">通配符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#边界通配符"><span class="nav-number">4.1.</span> <span class="nav-text">边界通配符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛型方法"><span class="nav-number">5.</span> <span class="nav-text">泛型方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#要点"><span class="nav-number">6.</span> <span class="nav-text">要点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#泛型类被所有的调用共享"><span class="nav-number">6.1.</span> <span class="nav-text">泛型类被所有的调用共享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型转换和实例判断"><span class="nav-number">6.2.</span> <span class="nav-text">类型转换和实例判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类字面量作为运行时类型标记"><span class="nav-number">7.</span> <span class="nav-text">类字面量作为运行时类型标记</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#下边界通配符"><span class="nav-number">8.</span> <span class="nav-text">下边界通配符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通配符的匹配（wildcard-capture）"><span class="nav-number">8.1.</span> <span class="nav-text">通配符的匹配（wildcard capture）</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
