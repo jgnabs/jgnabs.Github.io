@@ -103,6 +103,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -116,19 +117,46 @@
     <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
         <li class="menu-item menu-item-archives">
 
     <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
 
   </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 
 </nav>
+  <div class="site-search">
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+      <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+    
+  </div>
+</div>
+
+  </div>
 </div>
     </header>
 
@@ -203,76 +231,6 @@
 <blockquote>
 <p>它支持C，C ++，PHP和Java编译器。OnlineGDB的独特功能是，您可以逐步调试您的代码。一旦代码被写入，它可以很容易地格式化，使其看起来不错。</p>
 </blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/13/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="SpaceX">
-      <meta itemprop="description" content="秀外慧中流砥柱">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SpaceX">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/03/13/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-03-13 17:06:47" itemprop="dateCreated datePublished" datetime="2020-03-13T17:06:47+08:00">2020-03-13</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
 
       
     </div>
@@ -1092,6 +1050,88 @@
   
   
 
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/java-jvm-threaddump/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/01/16/java-jvm-threaddump/" class="post-title-link" itemprop="url">服务器隐忧排查</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-16 14:17:53" itemprop="dateCreated datePublished" datetime="2018-01-16T14:17:53+08:00">2018-01-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h1><h2 id="查询耗费进程的pid"><a href="#查询耗费进程的pid" class="headerlink" title="查询耗费进程的pid"></a>查询耗费进程的pid</h2><p>top -H</p>
+<h2 id="查询该进程的线程占用情况"><a href="#查询该进程的线程占用情况" class="headerlink" title="查询该进程的线程占用情况"></a>查询该进程的线程占用情况</h2><p>top -H -p $pid<br>或者top -p $pid,shift + h 线程按照CPU排序。</p>
+<h2 id="查询线程状态信息"><a href="#查询线程状态信息" class="headerlink" title="查询线程状态信息"></a>查询线程状态信息</h2><p>jstack $pid |grep $tid(需要转换为十六进制) -A 30</p>
+<h2 id="jstack命令记录"><a href="#jstack命令记录" class="headerlink" title="jstack命令记录"></a>jstack命令记录</h2><p>jstack -l $pid<br>jstack -l -m $pid #to print both java and native frames (mixed mode)，打印java和本地帧。如果调用动态库的话 一定要带上该参数。</p>
+<h3 id="ThreadDump文件"><a href="#ThreadDump文件" class="headerlink" title="ThreadDump文件"></a>ThreadDump文件</h3><p>jstack -l $pid | tee -a $file-path</p>
+<h2 id="直接转换十六进制"><a href="#直接转换十六进制" class="headerlink" title="直接转换十六进制"></a>直接转换十六进制</h2><p>echo ‘obase=16; $pid’ | bc 或者  printf “%x\n” $pid</p>
+<h2 id="显示内存模型信息"><a href="#显示内存模型信息" class="headerlink" title="显示内存模型信息"></a>显示内存模型信息</h2><p>jmap -histo:live $pid | head -n 100</p>
+<h2 id="统计打印出来的Thread-Info"><a href="#统计打印出来的Thread-Info" class="headerlink" title="统计打印出来的Thread_Info"></a>统计打印出来的Thread_Info</h2><p>grep java.lang.Thread.State abnormalThreadInfo.txt | awk ‘{print $2$3$4$5}’ | sort | uniq -c</p>
+<h1 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h1><h2 id="查看当前Java的进程信息"><a href="#查看当前Java的进程信息" class="headerlink" title="查看当前Java的进程信息"></a>查看当前Java的进程信息</h2><p>jps -l</p>
+<h2 id="查看当前存活的对象"><a href="#查看当前存活的对象" class="headerlink" title="查看当前存活的对象"></a>查看当前存活的对象</h2><p>jmap -histo:live $pid</p>
+<h2 id="打印当前的堆信息"><a href="#打印当前的堆信息" class="headerlink" title="打印当前的堆信息"></a>打印当前的堆信息</h2><p>jmap –heap $pid</p>
+<h1 id="jstat命令指南"><a href="#jstat命令指南" class="headerlink" title="jstat命令指南"></a>jstat命令指南</h1><h2 id="类加载统计"><a href="#类加载统计" class="headerlink" title="类加载统计"></a>类加载统计</h2><p>jstat -class $pid   </p>
+<blockquote>
+<p>Loaded:加载class的数量<br>Bytes：所占用空间大小<br>Unloaded：未加载数量<br>Bytes:未加载占用空间<br>Time：时间 </p>
+</blockquote>
+<h2 id="类编译统计"><a href="#类编译统计" class="headerlink" title="类编译统计"></a>类编译统计</h2><p>jstat -compiler 6988  </p>
+<blockquote>
+<p>Compiled：编译数量。<br>Failed：失败数量<br>Invalid：不可用数量<br>Time：时间<br>FailedType：失败类型<br>FailedMethod：失败的方法 </p>
+</blockquote>
+<h2 id="总结统计"><a href="#总结统计" class="headerlink" title="总结统计"></a>总结统计</h2><p>jstat -gcutil $pid<br><a href="https://www.cnblogs.com/yjd_hycf_space/p/7755633.html" target="_blank" rel="noopener">jvm-各分区定义</a></p>
+<h1 id="jinfo命令指南"><a href="#jinfo命令指南" class="headerlink" title="jinfo命令指南"></a>jinfo命令指南</h1><h2 id="查看某进程的参数信息"><a href="#查看某进程的参数信息" class="headerlink" title="查看某进程的参数信息"></a>查看某进程的参数信息</h2><p>jinfo -flags $pid</p>
+<h2 id="筛选某进程的某一参数信息"><a href="#筛选某进程的某一参数信息" class="headerlink" title="筛选某进程的某一参数信息"></a>筛选某进程的某一参数信息</h2><p>jinfo -flag MaxHeapSize $pid    #此参数已经在JAVA8中过期了，转换为了metaspace。</p>
+<blockquote>
+<p>jinfo还可以直接更改参数的值，使用在生产情况。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
   </div>
 
   
@@ -1164,7 +1204,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1215,6 +1255,7 @@
   <span class="author" itemprop="copyrightHolder">SpaceX</span>
 </div>
 
+<a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">豫ICP备16002676号-1</a>
         
 
 
@@ -1248,6 +1289,13 @@
 
   
 
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
 
 
 
