@@ -250,6 +250,71 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/28/why-lamda-needs-final/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/09/28/why-lamda-needs-final/" class="post-title-link" itemprop="url">为什么lambda需要final</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-09-28 17:22:24" itemprop="dateCreated datePublished" datetime="2019-09-28T17:22:24+08:00">2019-09-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="http://pic.yupoo.com/alldios/0006e237/78650bff.png" alt=""></p>
+<p>如上所示，如果在lambda表达式内部使用注释的代码，则会提示以下错误。 </p>
+<p><code>local variables referenced from a lambda expression must be final or effectively final</code></p>
+<p>那么为什么lambda表达式内部引用外部局部变量需要声明为final呢？</p>
+<p>lambda可以理解为本来就是一个方法，如右侧所示，本地变量是存储在栈帧的局部变量表的，是私有的。<br>而方法的传参是值传递的，所以在内部遍历中对变量的操作是不会影响到外部局部变量的。</p>
+<p>但是语义上来说我们常常把lambda stream和for循环看做一样。其实内部实现是不一样的。lambda可以看做是调用了一个新的方法，而for循环本身就是方法的一部分。</p>
+<p>所以既然如此，那java就把外部变量直接声明为final类型，或者effectively final（不会再lambda内部对外部引用变量修改）。<br>这样保证了语义的一致性。</p>
+<p><a href="https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html" target="_blank" rel="noopener">参考链接</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/16/CORS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -487,7 +552,7 @@
 
 <p><code>? super T</code>表示未知类型必须是<code>T</code>类型的父类，这样将可以满足条件。 </p>
 <h3 id="通配符的匹配（wildcard-capture）"><a href="#通配符的匹配（wildcard-capture）" class="headerlink" title="通配符的匹配（wildcard capture）"></a>通配符的匹配（wildcard capture）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;?&gt; unknownSet &#x3D; new HashSet&lt;String&gt;();</span><br><span class="line">class Collections &#123;</span><br><span class="line">    ...</span><br><span class="line">    &lt;T&gt; public static Set&lt;T&gt; unmodifiableSet(Set&lt;T&gt; set) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">Set&lt;?&gt; s &#x3D; Collections.unmodifiableSet(unknownSet);</span><br></pre></td></tr></table></figure>
-<p>上述方式介绍了一种新的特殊规则，同时符合类型安全的策略，即通配符的匹配。即编译器可以把<code>?</code>推断为<code>T</code>。</p>
+<p>上述方式介绍了一种新的特殊规则，同时符合类型安全的策略，即通配符的匹配。即编译器可以把<code>?</code>当做泛型方法的类型参数。</p>
 
       
     </div>
@@ -791,6 +856,102 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/java-oop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/06/07/java-oop/" class="post-title-link" itemprop="url">java OOP</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-06-07 09:07:21" itemprop="dateCreated datePublished" datetime="2018-06-07T09:07:21+08:00">2018-06-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="什么是Java"><a href="#什么是Java" class="headerlink" title="什么是Java"></a>什么是Java</h2><p>Java是一个并发的、基于类的、面向对象的计算机编程语言。优点如下:<br>代码的模块化开发，易于维护和修改。<br>代码的可重用性。<br>提高了代码的可靠性和灵活性。<br>增加对代码的理解。</p>
+<blockquote>
+<p>值得注意的是，Java不是百分百面向对象的，因为8种基本类型不是对象。</p>
+</blockquote>
+<h2 id="面向对象有哪些概念？"><a href="#面向对象有哪些概念？" class="headerlink" title="面向对象有哪些概念？"></a>面向对象有哪些概念？</h2><ul>
+<li>抽象</li>
+<li>封装</li>
+<li>多态性</li>
+<li>继承</li>
+<li>预定义类型必须是对象</li>
+<li>用户定义的类型必须是对象</li>
+<li>操作必须通过向对象发送消息来执行</li>
+</ul>
+<h2 id="类和类之间的关系，耦合度从高到低"><a href="#类和类之间的关系，耦合度从高到低" class="headerlink" title="类和类之间的关系，耦合度从高到低"></a>类和类之间的关系，耦合度从高到低</h2><p>is - 继承、实现<br>has - 组合、聚合、关联<br>use - 依赖。</p>
+<h3 id="依赖关系-Dependency"><a href="#依赖关系-Dependency" class="headerlink" title="依赖关系(Dependency)"></a>依赖关系(Dependency)</h3><p><strong>单向</strong>，表示一个类依赖于另一个类的定义，其中一个类的变化将影响另外一个类，是一种“use a”关系!如果A依赖于B，则B表现为A的局部变量，方法参数，静态方法调用等</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;  </span><br><span class="line">        Card card = <span class="keyword">new</span> Card();<span class="comment">//局部变量  </span></span><br><span class="line">        ....  </span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(Card card)</span></span>&#123;&#125;   <span class="comment">//方法参数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething2</span><span class="params">()</span></span>&#123;  </span><br><span class="line">            <span class="keyword">int</span> id = Card.getId(); <span class="comment">//静态方法调用  </span></span><br><span class="line">            ...  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="关联关系-Association"><a href="#关联关系-Association" class="headerlink" title="关联关系(Association)"></a>关联关系(Association)</h3><p>单向或双向（通常我们需要避免使用双向关联关系），是一种”has a”关系，如果A单向关联B，则可以说A has a B，通常表现为全局变量。</p>
+<blockquote>
+<p>特点是：不是在构造方法中设置的</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Address address;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAddress</span> <span class="params">(Address address)</span></span>&#123;        </span><br><span class="line">        <span class="keyword">this</span>.address= address;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Address <span class="title">getAddress</span> <span class="params">()</span></span>&#123;          </span><br><span class="line">        <span class="keyword">return</span> address;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>双关联</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">customer</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Product product[]    ;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> customer customer[]    ;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>自关联</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Node current    ;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="聚合关系-Aggregation"><a href="#聚合关系-Aggregation" class="headerlink" title="聚合关系(Aggregation)"></a>聚合关系(Aggregation)</h3><blockquote>
+<p>聚合的特点是：有这个属性，且要在构造方法中使用，但不是在构造方法中创建的。<br>注意和组合的差别：两者的创建时机不同，组合是在Person创建的时候，被创建的。聚合是用<strong>构造参数</strong>创建的。</p>
+</blockquote>
+<p>单向，关联关系的一种，与关联关系之间的区别是<strong>语义上</strong>的，关联的两个对象通常是平等的，聚合则一般不平等，有一种整体和局部的感觉，<br>关联的两个对象之间一般是平等的，例如你是我的朋友，聚合则一般不是平等的，例如一个公司包含了很多员工，其实现上是差不多的。实现上区别不大!</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Team</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Person person;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Team</span><span class="params">(Person person)</span></span>&#123;  </span><br><span class="line">        <span class="keyword">this</span>.person = person;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合关系-Composition"><a href="#组合关系-Composition" class="headerlink" title="组合关系(Composition)"></a>组合关系(Composition)</h3><p>组合也是关联关系的一种特例，它体现的是一种contains-a的关系，这种关系比聚合更强，也称为强聚合。<br>它同样体现整体与部分间的关系，但此时整体与部分是不可分的，整体的生命周期结束也就意味着部分的生命周期结束，比如人和人的大脑。<br>表现在代码层面，和关联关系是一致的，只能从语义级别来区分。在UML类图设计中，组合关系以实心菱形加实线箭头表示。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Person和Heart之间是组合</span></span><br><span class="line">    <span class="keyword">private</span> Heart h;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span></span>&#123;</span><br><span class="line">        h=<span class="keyword">new</span> Heart();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>特征是：<strong>要在构造方法中创建对象</strong></p>
+<h2 id="继承关系-Inheritance"><a href="#继承关系-Inheritance" class="headerlink" title="继承关系(Inheritance)"></a>继承关系(Inheritance)</h2><h2 id="实现（Realization）-类实现接口属于这种关系"><a href="#实现（Realization）-类实现接口属于这种关系" class="headerlink" title="实现（Realization） 类实现接口属于这种关系"></a>实现（Realization） 类实现接口属于这种关系</h2><h2 id="泛化（Generalization）-即”is-a”关系，类继承抽象类，类继承父类都属于这种关系"><a href="#泛化（Generalization）-即”is-a”关系，类继承抽象类，类继承父类都属于这种关系" class="headerlink" title="泛化（Generalization） 即”is a”关系，类继承抽象类，类继承父类都属于这种关系"></a>泛化（Generalization） 即”is a”关系，类继承抽象类，类继承父类都属于这种关系</h2>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/07/sql-libai-diff/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -952,186 +1113,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/31/sql-oralce-install/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="SpaceX">
-      <meta itemprop="description" content="秀外慧中流砥柱">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SpaceX">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/03/31/sql-oralce-install/" class="post-title-link" itemprop="url">oracle安装记录</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-03-31 07:53:37" itemprop="dateCreated datePublished" datetime="2018-03-31T07:53:37+08:00">2018-03-31</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install binutils compat-libstdc++-<span class="number">33</span> elfutils-libelf elfutils-libelf-devel glibc glibc-common glibc-devel gcc gcc-c++ libaio-devel libaio libgcc libstdc++ libstdc++-devel make sysstat unixODBC unixODBC-devel pdksh ksh libaio.i686 glibc.i686 compat-libstdc++-<span class="number">33</span>.i686 libaio-devel.i686 libgcc.i686 libstdc++.i686 unixODBC.i686 unixODBC-devel.i686</span><br></pre></td></tr></table></figure>
-
-<h2 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget unzip <span class="built_in">net</span>-tools </span><br><span class="line">wget http://public-yum.oracle.com/public-yum-ol7.repo -O /etc/yum.repos.d/public-yum-ol7.repo</span><br><span class="line">wget http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol7 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><h3 id="配置环境方法一（使用插件）"><a href="#配置环境方法一（使用插件）" class="headerlink" title="配置环境方法一（使用插件）"></a>配置环境方法一（使用插件）</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install oracle-rdbms-server-<span class="number">11</span>gR2-preinstall</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置环境方法二"><a href="#配置环境方法二" class="headerlink" title="配置环境方法二"></a>配置环境方法二</h3><h4 id="配置用户相关"><a href="#配置用户相关" class="headerlink" title="配置用户相关"></a>配置用户相关</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">groupadd oinstall </span><br><span class="line">groupadd dba </span><br><span class="line">useradd -g oinstall -G dba oracle </span><br><span class="line">passwd oracle</span><br><span class="line">密码：<span class="number">123456</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="添加oracle安全限制"><a href="#添加oracle安全限制" class="headerlink" title="添加oracle安全限制"></a>添加oracle安全限制</h4><blockquote>
-<p>vi /etc/security/limits.conf 末尾添加</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">oracle  soft    nproc  2047 </span><br><span class="line">oracle  hard    nproc  16384 </span><br><span class="line">oracle  soft    nofile  1024 </span><br><span class="line">oracle  hard    nofile  65536 </span><br><span class="line">oracle  soft    stack  10240</span><br></pre></td></tr></table></figure>
-
-<h4 id="修改内核变量配置文件"><a href="#修改内核变量配置文件" class="headerlink" title="修改内核变量配置文件"></a>修改内核变量配置文件</h4><blockquote>
-<p>vi /etc/sysctl.conf 添加</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">fs.aio-max-nr = 1048576 </span><br><span class="line">fs.file-max = 6815744 </span><br><span class="line">kernel.shmall = 2097152 </span><br><span class="line">kernel.shmmax = 1610612736 #共享内存字节数(一般75%物理内存，此变量要根据实际情款修改)  1.5G</span><br><span class="line">kernel.shmmni = 4096 </span><br><span class="line">kernel.sem = 250 32000 100 128 </span><br><span class="line">net.ipv4.ip_local_port_range = 9000 65500 </span><br><span class="line">net.core.rmem_default = 262144 </span><br><span class="line">net.core.rmem_max = 4194304 </span><br><span class="line">net.core.wmem_default = 262144 </span><br><span class="line">net.core.wmem_max = 1048586 </span><br><span class="line">查看添加是够成功：sysctl -p</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><blockquote>
-<p>vim .bash_profile </p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">export ORACLE_BASE=/usr/local/u01/oracle</span><br><span class="line">export ORACLE_HOME=/usr/local/u01/oracle/product/11.2.0/dbhome_1</span><br><span class="line">export ORACLE_SID=shibdz </span><br><span class="line">export NLS_LANG="american_america.ZHS16GBK"</span><br><span class="line">export NLS_DATE_FORMAT="YYYY-MM-DD HH24:Mi:SS"</span><br><span class="line">export LD_LIBRARY_PATH=$ORACLE_HOME/lib</span><br><span class="line">export PATH=$ORACLE_HOME/bin:$PATH </span><br><span class="line">PATH=$PATH:$HOME/bin</span><br><span class="line">export PATH</span><br></pre></td></tr></table></figure>
-<h2 id="创建文件夹-赋予权限"><a href="#创建文件夹-赋予权限" class="headerlink" title="创建文件夹 赋予权限"></a>创建文件夹 赋予权限</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su root</span><br><span class="line"><span class="built_in">mkdir</span> -p /usr/local/u01/oracle &amp;&amp; chown -R oracle:oinstall /usr/local/u01/oracle</span><br><span class="line"><span class="built_in">mkdir</span> -p /usr/local/u01/oraInventory &amp;&amp; chown -R oracle:oinstall /usr/local/u01/oraInventory</span><br></pre></td></tr></table></figure>
-
-<h2 id="解压文件并且赋予权限"><a href="#解压文件并且赋予权限" class="headerlink" title="解压文件并且赋予权限"></a>解压文件并且赋予权限</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unzip linux.x64_11gR2_database_1of2.zip &amp;&amp; unzip linux.x64_11gR2_database_2of2.zip </span><br><span class="line">chown -R oracle:oinstall /home/oracle/database</span><br></pre></td></tr></table></figure>
-
-<h2 id="配置db-install-rsp"><a href="#配置db-install-rsp" class="headerlink" title="配置db_install.rsp"></a>配置db_install.rsp</h2><blockquote>
-<p>cp -r /home/oracle/database/response /home/oracle/rsp 备份</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#我的/home/oracle/rsp/db_install.rsp</span><br><span class="line">oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v11_2_0</span><br><span class="line">#INSTALL_DB_AND_CONFIG安装并自动配置数据库实例和监听 建议首次安装用这个</span><br><span class="line">#不然配置另外两个文件，新建实例和监听</span><br><span class="line">oracle.install.option=INSTALL_DB_AND_CONFIG</span><br><span class="line">ORACLE_HOSTNAME=localhost</span><br><span class="line">UNIX_GROUP_NAME=oinstall</span><br><span class="line">INVENTORY_LOCATION=/usr/local/u01/oraInventory</span><br><span class="line">SELECTED_LANGUAGES=zh_CN,en</span><br><span class="line">ORACLE_HOME=/usr/local/u01/oracle/product/11.2.0/dbhome_1</span><br><span class="line">ORACLE_BASE=/usr/local/u01/oracle</span><br><span class="line">oracle.install.db.InstallEdition=EE</span><br><span class="line">oracle.install.db.isCustomInstall=true</span><br><span class="line">oracle.install.db.customComponents=oracle.server:11.2.0.1.0,oracle.sysman.ccr:10.2.7.0.0,oracle.xdk:11.2.0.1.0,oracle.rdbms.oci:11.2.0.1.0,oracle.network:11.2.0.1.0,oracle.network.listener:11.2.0.1.0,oracle.rdbms:11.2.0.1.0,oracle.options:11.2.0.1.0,oracle.rdbms.partitioning:11.2.0.1.0,oracle.oraolap:11.2.0.1.0,oracle.rdbms.dm:11.2.0.1.0,oracle.rdbms.dv:11.2.0.1.0,orcle.rdbms.lbac:11.2.0.1.0,oracle.rdbms.rat:11.2.0.1.0</span><br><span class="line">oracle.install.db.DBA_GROUP=dba</span><br><span class="line">oracle.install.db.OPER_GROUP=oinstall</span><br><span class="line">oracle.install.db.config.starterdb.type=GENERAL_PURPOSE</span><br><span class="line">#这个是服务名</span><br><span class="line">oracle.install.db.config.starterdb.globalDBName=shibdz_ypt</span><br><span class="line">#实例sid</span><br><span class="line">oracle.install.db.config.starterdb.SID=shibdz</span><br><span class="line">oracle.install.db.config.starterdb.characterSet=AL32UTF8</span><br><span class="line">oracle.install.db.config.starterdb.memoryOption=true</span><br><span class="line">oracle.install.db.config.starterdb.memoryLimit=1024</span><br><span class="line">#是否安装学习的scott和hr(我就知道这两个)</span><br><span class="line">oracle.install.db.config.starterdb.installExampleSchemas=true</span><br><span class="line">oracle.install.db.config.starterdb.enableSecuritySettings=true</span><br><span class="line">#密码全设置成123456 (安装时会提示，个人学习忽略)</span><br><span class="line">oracle.install.db.config.starterdb.password.ALL=123456</span><br><span class="line">oracle.install.db.config.starterdb.control=DB_CONTROL</span><br><span class="line">oracle.install.db.config.starterdb.dbcontrol.enableEmailNotification=false</span><br><span class="line">oracle.install.db.config.starterdb.automatedBackup.enable=false</span><br><span class="line">oracle.install.db.config.starterdb.storageType=FILE_SYSTEM_STORAGE</span><br><span class="line">oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=/usr/local/u01/oracle/oradata</span><br><span class="line">#true</span><br><span class="line">DECLINE_SECURITY_UPDATES=true</span><br></pre></td></tr></table></figure>
-
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/oracle/database/runInstaller -silent -ignorePrereq  -responseFile /home/oracle/rsp/db_install.rsp</span><br></pre></td></tr></table></figure>
-
-<h3 id="解决-INS-35173"><a href="#解决-INS-35173" class="headerlink" title="解决 INS-35173"></a>解决 INS-35173</h3><blockquote>
-<p>修改/etc/fstab  添加如下一行</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmpfs            &#x2F;dev&#x2F;shm       tmpfs  defaults,size&#x3D;3G       0 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dbstart $ORACLE_HOME</span><br><span class="line">dbshut  $ORACLE_HOME</span><br><span class="line">lsnrctl stop、lsnrctl <span class="built_in">start</span>、lsnrctl status</span><br><span class="line">连接数据库：sqlplus / as sysdba </span><br><span class="line">shutdown immediate</span><br><span class="line">startup</span><br></pre></td></tr></table></figure>
-<h3 id="监听服务配置文件展示"><a href="#监听服务配置文件展示" class="headerlink" title="监听服务配置文件展示"></a>监听服务配置文件展示</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># tnsnames.ora Network Configuration File: /usr/local/u01/oracle/product/<span class="number">11</span>.<span class="number">2</span>.<span class="number">0</span>/dbhome_1/network/admin/tnsnames.ora</span><br><span class="line"># Generated by Oracle configuration tools.</span><br><span class="line"></span><br><span class="line">SHIBDZ_YPT =</span><br><span class="line">  (DESCRIPTION =</span><br><span class="line">    (ADDRESS = (PROTOCOL = TCP)(HOST = <span class="number">10</span>.<span class="number">9</span>.<span class="number">4</span>.<span class="number">192</span>)(PORT = <span class="number">1521</span>))</span><br><span class="line">    (CONNECT_DATA =</span><br><span class="line">      (SERVER = DEDICATED)</span><br><span class="line">      (SERVICE_NAME = shibdz_ypt)</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># listener.ora Network Configuration File: /usr/local/u01/oracle/product/<span class="number">11</span>.<span class="number">2</span>.<span class="number">0</span>/dbhome_1/network/admin/listener.ora</span><br><span class="line"># Generated by Oracle configuration tools.</span><br><span class="line">SID_LIST_LISTENER =</span><br><span class="line">  (SID_LIST =</span><br><span class="line">    (SID_DESC =</span><br><span class="line">      (GLOBAL_DBNAME = shibdz_ypt)</span><br><span class="line">      (ORACLE_HOME = /usr/local/u01/oracle/product/<span class="number">11</span>.<span class="number">2</span>.<span class="number">0</span>/dbhome_1)</span><br><span class="line">	  (SID_NAME = shibdz)</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">LISTENER =</span><br><span class="line">  (DESCRIPTION_LIST =</span><br><span class="line">    (DESCRIPTION =</span><br><span class="line">      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))</span><br><span class="line">      (ADDRESS = (PROTOCOL = TCP)(HOST = <span class="number">10</span>.<span class="number">9</span>.<span class="number">4</span>.<span class="number">192</span>)(PORT = <span class="number">1521</span>))</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">ADR_BASE_LISTENER = /usr/local/u01/oracle</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/java-jvm-threaddump/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="SpaceX">
-      <meta itemprop="description" content="秀外慧中流砥柱">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SpaceX">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2018/01/16/java-jvm-threaddump/" class="post-title-link" itemprop="url">服务器隐忧排查</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2018-01-16 14:17:53" itemprop="dateCreated datePublished" datetime="2018-01-16T14:17:53+08:00">2018-01-16</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h1><h2 id="查询耗费进程的pid"><a href="#查询耗费进程的pid" class="headerlink" title="查询耗费进程的pid"></a>查询耗费进程的pid</h2><p>top -H</p>
-<h2 id="查询该进程的线程占用情况"><a href="#查询该进程的线程占用情况" class="headerlink" title="查询该进程的线程占用情况"></a>查询该进程的线程占用情况</h2><p>top -H -p $pid<br>或者top -p $pid,shift + h 线程按照CPU排序。</p>
-<h2 id="查询线程状态信息"><a href="#查询线程状态信息" class="headerlink" title="查询线程状态信息"></a>查询线程状态信息</h2><p>jstack $pid |grep $tid(需要转换为十六进制) -A 30</p>
-<h2 id="jstack命令记录"><a href="#jstack命令记录" class="headerlink" title="jstack命令记录"></a>jstack命令记录</h2><p>jstack -l $pid<br>jstack -l -m $pid #to print both java and native frames (mixed mode)，打印java和本地帧。如果调用动态库的话 一定要带上该参数。</p>
-<h3 id="ThreadDump文件"><a href="#ThreadDump文件" class="headerlink" title="ThreadDump文件"></a>ThreadDump文件</h3><p>jstack -l $pid | tee -a $file-path</p>
-<h2 id="直接转换十六进制"><a href="#直接转换十六进制" class="headerlink" title="直接转换十六进制"></a>直接转换十六进制</h2><p>echo ‘obase=16; $pid’ | bc 或者  printf “%x\n” $pid</p>
-<h2 id="显示内存模型信息"><a href="#显示内存模型信息" class="headerlink" title="显示内存模型信息"></a>显示内存模型信息</h2><p>jmap -histo:live $pid | head -n 100</p>
-<h2 id="统计打印出来的Thread-Info"><a href="#统计打印出来的Thread-Info" class="headerlink" title="统计打印出来的Thread_Info"></a>统计打印出来的Thread_Info</h2><p>grep java.lang.Thread.State abnormalThreadInfo.txt | awk ‘{print $2$3$4$5}’ | sort | uniq -c</p>
-<h1 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h1><h2 id="查看当前Java的进程信息"><a href="#查看当前Java的进程信息" class="headerlink" title="查看当前Java的进程信息"></a>查看当前Java的进程信息</h2><p>jps -l</p>
-<h2 id="查看当前存活的对象"><a href="#查看当前存活的对象" class="headerlink" title="查看当前存活的对象"></a>查看当前存活的对象</h2><p>jmap -histo:live $pid</p>
-<h2 id="打印当前的堆信息"><a href="#打印当前的堆信息" class="headerlink" title="打印当前的堆信息"></a>打印当前的堆信息</h2><p>jmap –heap $pid</p>
-<h1 id="jstat命令指南"><a href="#jstat命令指南" class="headerlink" title="jstat命令指南"></a>jstat命令指南</h1><h2 id="类加载统计"><a href="#类加载统计" class="headerlink" title="类加载统计"></a>类加载统计</h2><p>jstat -class $pid   </p>
-<blockquote>
-<p>Loaded:加载class的数量<br>Bytes：所占用空间大小<br>Unloaded：未加载数量<br>Bytes:未加载占用空间<br>Time：时间 </p>
-</blockquote>
-<h2 id="类编译统计"><a href="#类编译统计" class="headerlink" title="类编译统计"></a>类编译统计</h2><p>jstat -compiler 6988  </p>
-<blockquote>
-<p>Compiled：编译数量。<br>Failed：失败数量<br>Invalid：不可用数量<br>Time：时间<br>FailedType：失败类型<br>FailedMethod：失败的方法 </p>
-</blockquote>
-<h2 id="总结统计"><a href="#总结统计" class="headerlink" title="总结统计"></a>总结统计</h2><p>jstat -gcutil $pid<br><a href="https://www.cnblogs.com/yjd_hycf_space/p/7755633.html" target="_blank" rel="noopener">jvm-各分区定义</a></p>
-<h1 id="jinfo命令指南"><a href="#jinfo命令指南" class="headerlink" title="jinfo命令指南"></a>jinfo命令指南</h1><h2 id="查看某进程的参数信息"><a href="#查看某进程的参数信息" class="headerlink" title="查看某进程的参数信息"></a>查看某进程的参数信息</h2><p>jinfo -flags $pid</p>
-<h2 id="筛选某进程的某一参数信息"><a href="#筛选某进程的某一参数信息" class="headerlink" title="筛选某进程的某一参数信息"></a>筛选某进程的某一参数信息</h2><p>jinfo -flag MaxHeapSize $pid    #此参数已经在JAVA8中过期了，转换为了metaspace。</p>
-<blockquote>
-<p>jinfo还可以直接更改参数的值，使用在生产情况。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1204,7 +1185,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1218,13 +1199,13 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://www.instagram.com/_heart_k/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;_heart_k&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+        <a href="https://www.instagram.com/bili_iish/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;bili_iish&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://gitee.com/Zalldios" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;Zalldios" rel="noopener" target="_blank"><i class="fa fa-fw fa-git"></i>Gitee</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://github.com/ChaojieDZhao" title="Github → https:&#x2F;&#x2F;github.com&#x2F;ChaojieDZhao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>Github</a>
+        <a href="//weibo.com/biliiish" target="_blank" rel="noopener" title="weibo → &#x2F;&#x2F;weibo.com&#x2F;biliiish"><i class="fa fa-fw fa-weibo"></i>weibo</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://space.bilibili.com/12295853" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;12295853" rel="noopener" target="_blank"><i class="fa fa-fw fa-youtube-play"></i>Bilibili</a>
@@ -1254,7 +1235,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

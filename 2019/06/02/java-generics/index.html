@@ -28,7 +28,7 @@
 <meta property="og:description" content="字典 type parameter，类型形参。如Collection&lt;Integer&gt;，该声明的类型形参是Integer。 parameterized type，参数化类型。如new Array&lt;Integer&gt;，该调用的参数化类型是Integer。 type variable，类型变量。如类声明public class Canvas&lt;T&gt; ，T就是类型变量。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2019-06-02T01:07:21.000Z">
-<meta property="article:modified_time" content="2020-01-14T06:40:08.062Z">
+<meta property="article:modified_time" content="2021-01-04T03:24:12.611Z">
 <meta property="article:author" content="SpaceX">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -319,7 +319,7 @@
 
 <p><code>? super T</code>表示未知类型必须是<code>T</code>类型的父类，这样将可以满足条件。 </p>
 <h3 id="通配符的匹配（wildcard-capture）"><a href="#通配符的匹配（wildcard-capture）" class="headerlink" title="通配符的匹配（wildcard capture）"></a>通配符的匹配（wildcard capture）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;?&gt; unknownSet &#x3D; new HashSet&lt;String&gt;();</span><br><span class="line">class Collections &#123;</span><br><span class="line">    ...</span><br><span class="line">    &lt;T&gt; public static Set&lt;T&gt; unmodifiableSet(Set&lt;T&gt; set) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">...</span><br><span class="line">Set&lt;?&gt; s &#x3D; Collections.unmodifiableSet(unknownSet);</span><br></pre></td></tr></table></figure>
-<p>上述方式介绍了一种新的特殊规则，同时符合类型安全的策略，即通配符的匹配。即编译器可以把<code>?</code>推断为<code>T</code>。</p>
+<p>上述方式介绍了一种新的特殊规则，同时符合类型安全的策略，即通配符的匹配。即编译器可以把<code>?</code>当做泛型方法的类型参数。</p>
 
     </div>
 
@@ -420,7 +420,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -434,13 +434,13 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://www.instagram.com/_heart_k/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;_heart_k&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+        <a href="https://www.instagram.com/bili_iish/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;bili_iish&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://gitee.com/Zalldios" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;Zalldios" rel="noopener" target="_blank"><i class="fa fa-fw fa-git"></i>Gitee</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://github.com/ChaojieDZhao" title="Github → https:&#x2F;&#x2F;github.com&#x2F;ChaojieDZhao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>Github</a>
+        <a href="//weibo.com/biliiish" target="_blank" rel="noopener" title="weibo → &#x2F;&#x2F;weibo.com&#x2F;biliiish"><i class="fa fa-fw fa-weibo"></i>weibo</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://space.bilibili.com/12295853" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;12295853" rel="noopener" target="_blank"><i class="fa fa-fw fa-youtube-play"></i>Bilibili</a>
@@ -470,7 +470,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

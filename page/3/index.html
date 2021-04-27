@@ -176,6 +176,142 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/20/sql-oracle-materialized-view/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/11/20/sql-oracle-materialized-view/" class="post-title-link" itemprop="url">oracle物化视图的使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-20 09:09:38" itemprop="dateCreated datePublished" datetime="2016-11-20T09:09:38+08:00">2016-11-20</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="物化视图的类型："><a href="#物化视图的类型：" class="headerlink" title="物化视图的类型："></a>物化视图的类型：</h3><p>on demand、on commit 二者的区别在于刷新方法的不同<br>on demand顾名思义，仅在该物化视图“需要”被刷新了，才进行刷新(refresh)，即更新物化视图，以保证和基表数据的一致性；<br>而on commit是说，一旦基表有了commit，即事务提交，则立刻刷新，立刻更新物化视图，使得数据和基表一致。</p>
+<h3 id="on-demand物化视图"><a href="#on-demand物化视图" class="headerlink" title="on demand物化视图"></a>on demand物化视图</h3><p>物化视图的创建本身是很复杂和需要优化参数设置的，特别是针对大型生产数据库系统而言。<br>但oracle允许以这种最简单的，类似于普通视图的方式来做，所以不可避免的会涉及到默认值问题。<br>也就是说oracle给物化视图的重要定义参数的默认值处理是我们需要特别注意的。</p>
+<p>物化视图的特点：<br>(1) 物化视图在某种意义上说就是一个物理表(而且不仅仅是一个物理表)，这通过其可以被user_tables查询出来，而得到佐证；<br>(2) 物化视图也是一种段(segment)，所以其有自己的物理存储属性；<br>(3) 物化视图会占用数据库磁盘空间，这点从user_segment的查询结果，可以得到佐证；<br>创建语句：create materialized view mv_name as select * from table_name<br>默认情况下，如果没指定刷新方法和刷新模式，则oracle默认为force和demand。</p>
+<h3 id="on-commit物化视图"><a href="#on-commit物化视图" class="headerlink" title="on commit物化视图"></a>on commit物化视图</h3><p>on commit物化视图的创建，和上面创建on demand的物化视图区别不大。因为on demand是默认的，所以on commit物化视图，需要再增加个参数即可。<br>需要注意的是，无法在定义时仅指定on commit，还得附带个参数才行。<br>创建on commit物化视图：create materialized view mv_name refresh force on commit as select * from table_name  </p>
+<h3 id="物化视图的刷新"><a href="#物化视图的刷新" class="headerlink" title="物化视图的刷新"></a>物化视图的刷新</h3><p>刷新（refresh）：指当基表发生了dml操作后，物化视图何时采用哪种方式和基表进行同步。<br>刷新的模式有两种：on demand和on commit。（如上所述）<br>刷新的方法有四种：fast、complete、force和never。<br>fast刷新采用增量刷新，只刷新自上次刷新以后进行的修改。<br>complete刷新对整个物化视图进行完全的刷新。<br>如果选择force方式，则oracle在刷新时会去判断是否可以进行快速刷新，如果可以则采用fast方式，否则采用complete的方式。<br>never指物化视图不进行任何刷新。<br>对于已经创建好的物化视图，可以修改其刷新方式，比如把物化视图mv_name的刷新方式修改为每天晚上10点刷新一次：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">materialized</span> <span class="keyword">view</span> mv_name <span class="keyword">refresh</span> <span class="keyword">force</span> <span class="keyword">on</span> <span class="keyword">demand</span> <span class="keyword">start</span> <span class="keyword">with</span> <span class="keyword">sysdate</span> <span class="keyword">next</span> <span class="keyword">to_date</span>(<span class="keyword">concat</span>(to_char(<span class="keyword">sysdate</span>+<span class="number">1</span>,<span class="string">'dd-mm-yyyy'</span>),<span class="string">' 22:00:00'</span>),<span class="string">'dd-mm-yyyy hh24:mi:ss'</span>)</span><br><span class="line">-或者job使用存储过程当时刷新，两者相差无几。先创建存储过程</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> p_refresh_stats <span class="keyword">is</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_mview.refresh(<span class="string">'mv_name'</span>, <span class="string">'c'</span>);</span><br><span class="line"><span class="keyword">end</span> p_refresh_stats;</span><br><span class="line">-然后创建job执行该存储过程</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  sys.dbms_scheduler.create_job(job_name            =&gt; <span class="string">'bjd_branch.job_refresh_stats'</span>,</span><br><span class="line">                                job_type            =&gt; <span class="string">'stored_procedure'</span>,</span><br><span class="line">                                job_action          =&gt; <span class="string">'p_refresh_stats'</span>,</span><br><span class="line">                                start_date          =&gt; <span class="keyword">to_date</span>(<span class="string">'01-07-2016 00:00:00'</span>, <span class="string">'dd-mm-yyyy hh24:mi:ss'</span>),</span><br><span class="line">                                repeat_interval     =&gt; <span class="string">'freq=hourly;interval=1'</span>,</span><br><span class="line">                                end_date            =&gt; <span class="keyword">to_date</span>(<span class="string">'01-07-2022 00:00:00'</span>, <span class="string">'dd-mm-yyyy hh24:mi:ss'</span>),</span><br><span class="line">                                job_class           =&gt; <span class="string">'default_job_class'</span>,</span><br><span class="line">                                enabled             =&gt; <span class="literal">true</span>,</span><br><span class="line">                                auto_drop           =&gt; <span class="literal">false</span>,</span><br><span class="line">                                comments            =&gt; <span class="string">''</span>);</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="物化视图具有表一样的特征"><a href="#物化视图具有表一样的特征" class="headerlink" title="物化视图具有表一样的特征"></a>物化视图具有表一样的特征</h3><p>所以可以像对表一样，我们可以为它创建索引，创建方法和对表一样。</p>
+<h3 id="物化视图的删除"><a href="#物化视图的删除" class="headerlink" title="物化视图的删除"></a>物化视图的删除</h3><p>虽然物化视图是和表一起管理的，但是在经常使用的oplsql工具中，并不能用删除表的方式来删除<br>（在表上右键选择‘drop’并不能删除物化视图），可以使用语句来实现：drop materialized view mv_name</p>
+<h3 id="普通视图和物化视图的区别"><a href="#普通视图和物化视图的区别" class="headerlink" title="普通视图和物化视图的区别"></a>普通视图和物化视图的区别</h3><p>普通视图和物化视图根本就不是一个东西，说区别都是硬拼到一起的，<br>首先明白基本概念，普通视图是不存储任何数据的，他只有定义，在查询中是转换为对应的定义sql去查询，<br>而物化视图是将数据转换为一个表，实际存储着数据，这样查询数据，就不用关联一大堆表，如果表很大的话，会在临时表空间内做大量的操作。</p>
+<p>普通视图的三个特征：<br>1、是简化设计，清晰编码的东西，他并不是提高性能的，他的存在只会降低性能<br>（如一个视图7个表关联，另一个视图8个表，程序员不知道，觉得很方便，把两个视图关联再做一个视图，那就惨了），他的存在未了在设计上的方便性</p>
+<p>2、其次，是安全，在授权给其他用户或者查看角度，多个表关联只允许查看，不允许修改，<br>单表也可以同with read only来控制，当然有些项目基于视图做面向对象的开发，即在视图上去做instand of触发器，就我个人而言是不站同的，虽然开发上方便，但是未必是好事。</p>
+<p>3、从不同的角度看不同的维度，视图可以划分维度和权限，并使多个维度的综合，也就是你要什么就可以从不同的角度看，而表是一个实体的而已，<br>一般维度较少（如：人员表和身份表关联，从人员表可以查看人员的维度统计，从身份看，可以看不同种类的身份有那些人或者多少人），<br>其次另一个如系统视图user_table、tab、user_objects这些视图，不同的用户下看到的肯定是不一样的，看的是自己的东西。<br>物化视图呢，用于olap系统中，当然部分oltp系统的小部分功能未了提高性能会借鉴一点点，因为表关联的开销很大，所以在开发中很多人就像把这个代价交给定期转存来完成，<br>oracle当然也提供了这个功能，就是将视图（或者一个大sql）的信息转换为物理数据存储，然后提供不同的策略：<br>定时刷还是及时刷、增量刷还是全局刷等等可以根据实际情况进行选择，总之你差的是表，不是视图。</p>
+<p>关于在刷新和索引上的区别<br>他们两个没有联系吧，刷新我不清楚你是否指的是物化视图的刷新，因为刷新的概念很泛，你说到这里我就理解为物化视图的刷新了，<br>上面也已经说了，这是一种策略和方法，其实它是通过对视图关联表上创建相应的log，根据日志信息的sql同步到物化视图中的，<br>一般来说：定时的一般是全局刷，及时的一般是局部刷。</p>
+<p>而索引这个说起来就多了，可以说索引专门是一门课程，大概点来说，索引一般有普通索引、位图索引、唯一性索引（还有全文索引啥的，一般不用），<br>其实仔细研究会发现无论是那一种索引都是b+树为基础，并起存放方式和表一样，是以段为单位，只是内部有树关系而已。</p>
+<p>1、普通索引是根据b+树找到第一个（索引时有序的），然后以当前为基准，向后顺序找到不符合条件的健值为止。<br>2、位图是在叶子节点上根据位图种类对叶子节点的值进行01编码存放（如该字段有1、2、3三种值，就会在叶子节点上有三个位图，<br>每个位图根据健值和rowid顺序存放是否为1、是否为2、是否为3，所以在rbo下统计很快，cbo下一般会认为是普通索引）。</p>
+<p>3、也是按照b+树找，只是找到就不再做任何操作，因为是唯一的。<br>因为b+查找是一个类似表的查询，而且获取到rowid后还是要回表查询的，所以这个过程的开销要和全表扫描计算那个结果更加快，oracle才会选择是走索引还是走全表扫描，<br>当然对于cbo和rbo选择的方式不一样，具体又是很多，cbo要依赖于表的统计信息，rbo是依赖于尝试。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/28/linux-cmd-tee/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2016/09/28/linux-cmd-tee/" class="post-title-link" itemprop="url">tee命令使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-09-28 17:22:24" itemprop="dateCreated datePublished" datetime="2016-09-28T17:22:24+08:00">2016-09-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>tee命令用于将数据重定向到文件，另一方面还可以提供一份重定向数据的副本作为后续命令的stdin。简单的说就是把数据重定向到给定文件和屏幕上。</p>
+<p>列如 <code>ls -l |tee file.txt|cat</code></p>
+<p>tee和echo类似，可以把打印内容输入到一个文件，常和<code>&lt;&lt;</code>使用<br><code>&lt;&lt;</code>字符表示从命令行读取输入，直到一个与&lt;&lt; 所跟内容相同的字符结束</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@alldios~]#tee /etc/yum.repos.d/docker.repo &lt;&lt;-'EOF'  #创建一个文件，内容就是下面命令行EOF之前的输入。</span><br><span class="line">[dockerrepo]</span><br><span class="line">name=Docker Repository</span><br><span class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/7/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://yum.dockerproject.org/gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/26/linux-cmd-sed/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -389,7 +525,7 @@
 <h3 id="docker的集群"><a href="#docker的集群" class="headerlink" title="docker的集群"></a>docker的集群</h3><blockquote>
 <p>A swarm is a group of machines that are running Docker and joined into a cluster. After that has happened, you continue to run the Docker commands you’re used to, but now they are executed on a cluster by a swarm manager. The machines in a swarm can be physical or virtual. After joining a swarm, they are referred to as nodes.</p>
 </blockquote>
-<h3 id="container命令"><a href="#container命令" class="headerlink" title="container命令"></a>container命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">docker container ls -a    #展示所有应用</span><br><span class="line">docker run -d -p 8761:8761 --name discover_eureka my/eureka:0.0.1    #后台（-d  代表detached mode）运行该应用</span><br><span class="line">docker run -d -p 8761:8761 -v /home/docker/cloud/logs/:/logs --name discover_eureka my/eureka:0.0.1</span><br><span class="line">docker run -d -p 5000:5000 --restart=always --name registry registry:2</span><br><span class="line">docker logs -f -t --tail 100 docker_zookeeper</span><br><span class="line">docker container stop &lt;Container NAME or ID&gt;          # 优雅的退出该应用</span><br><span class="line">docker container kill &lt;Container NAME or ID&gt;          # 强制终止该应用</span><br><span class="line">docker container rm $(docker container ls -a -q)         # 删除所有应用</span><br><span class="line">docker image ls -a                             # 展示所有镜像</span><br><span class="line">docker image rm $(docker image ls -a -q)   # 删除所有镜像</span><br><span class="line">docker login    # Log in this CLI session using your Docker credentials</span><br><span class="line">docker logout    #登出</span><br><span class="line">docker tag &lt;image&gt; username/repository:tag    # 为这个镜像命名方便推到远程服务器，远程仓库username/repository需要与本地镜像的仓库名一直才可以推</span><br><span class="line">docker push username/repository:tag            # Upload tagged image to registry</span><br><span class="line">docker run username/repository:tag                   # Run image from a registry</span><br></pre></td></tr></table></figure>
+<h3 id="container命令"><a href="#container命令" class="headerlink" title="container命令"></a>container命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">docker container ls -a    #展示所有应用</span><br><span class="line">docker run -d -p 8761:8761 --name discover_eureka my/eureka:0.0.1    #后台（-d  代表detached mode）运行该应用</span><br><span class="line">docker run -d -p 8761:8761 -v /home/docker/cloud/logs/:/logs --name discover_eureka my/eureka:0.0.1</span><br><span class="line">docker run -d -p 5000:5000 --restart=always --name registry registry:2</span><br><span class="line">docker logs -f -t --tail 100 docker_zookeeper</span><br><span class="line">docker container stop &lt;Container NAME or ID&gt;          # 优雅的退出该应用</span><br><span class="line">docker container kill &lt;Container NAME or ID&gt;          # 强制终止该应用</span><br><span class="line">docker container rm $(docker container ls -a -q)         # 删除所有应用</span><br><span class="line">docker image ls -a                             # 展示所有镜像</span><br><span class="line">docker image rm $(docker image ls -a -q)   # 删除所有镜像</span><br><span class="line">docker login    # Log in this CLI session using your Docker credentials</span><br><span class="line">docker logout    #登出</span><br><span class="line">docker tag &lt;image&gt; username/repository:tag    # 为这个镜像命名方便推到远程服务器，远程仓库username/repository需要与本地镜像的仓库名一直才可以推</span><br><span class="line">docker push username/repository:tag            # Upload tagged image to registry</span><br><span class="line">docker run username/repository:tag                   # Run image from a registry</span><br><span class="line"> docker save -o with-font.tar openjdk/8-openjdk-aipine:with-font    #保存镜像到文件</span><br><span class="line"> docker load -i docker-archive/with-font.tar     #加载文件到镜像</span><br></pre></td></tr></table></figure>
 
 <h3 id="swarm-命令"><a href="#swarm-命令" class="headerlink" title="swarm 命令"></a>swarm 命令</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">curl -L https://github.com/docker/machine/releases/download/v0.13.0/docker-machine-`uname -s`-`uname -m` &gt;/tmp/docker-machine &amp;&amp; chmod +x /tmp/docker-machine &amp;&amp; sudo cp /tmp/docker-machine /usr/local/bin/docker-machine    #安装docker-machine</span><br><span class="line">docker-machine version </span><br><span class="line">rm $(which docker-machine)</span><br><span class="line">docker-machine rm -f $(docker-machine ls -q)</span><br><span class="line">docker stack ls                                            # List stacks or apps</span><br><span class="line">docker stack deploy -c &lt;composefile&gt; &lt;appname&gt;  # Run the specified Compose file</span><br><span class="line">docker service ls                 # List running services associated with an app</span><br><span class="line">docker service ps &lt;service&gt;                  # List tasks associated with an app</span><br><span class="line">docker inspect &lt;task or container&gt;                   # Inspect task or container</span><br><span class="line">docker container ls -q                                      # List container IDs</span><br><span class="line">docker stack rm &lt;appname&gt;                             # Tear down an application</span><br><span class="line">docker swarm leave --force    # Take down a single node swarm from the manager</span><br></pre></td></tr></table></figure>
 
@@ -979,136 +1115,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/30/jquery-common-ques/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="SpaceX">
-      <meta itemprop="description" content="秀外慧中流砥柱">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SpaceX">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/07/30/jquery-common-ques/" class="post-title-link" itemprop="url">jquery选择器记录</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-07-30 18:41:00" itemprop="dateCreated datePublished" datetime="2016-07-30T18:41:00+08:00">2016-07-30</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="jQuery-元素选择器"><a href="#jQuery-元素选择器" class="headerlink" title="jQuery 元素选择器"></a>jQuery 元素选择器</h2><p>jQuery 使用 CSS 选择器来选取HTML元素。<br>$(“p”) 选取p元素。<br>$(“p.intro”) 选取所有class=”intro”的p元素。<br>$(“p#demo”) 选取所有id=”demo”的p元素。</p>
-<h2 id="jQuery-属性选择器"><a href="#jQuery-属性选择器" class="headerlink" title="jQuery 属性选择器"></a>jQuery 属性选择器</h2><p>jQuery 使用 XPath 表达式来选择带有给定属性的元素。<br>$(“[href]”) 选取所有带有 href 属性的元素。<br>$(“[href=’#’]”) 选取所有带有 href 值等于 “#” 的元素。<br>$(“[href!=’#’]”) 选取所有带有 href 值不等于 “#” 的元素。<br>$(“[href$=’.jpg’]”) 选取所有 href 值以 “.jpg” 结尾的元素。</p>
-<h2 id="jQuery-CSS-选择器"><a href="#jQuery-CSS-选择器" class="headerlink" title="jQuery CSS 选择器"></a>jQuery CSS 选择器</h2><p>jQuery CSS 选择器可用于改变 HTML 元素的 CSS 属性。<br>下面的例子把所有 p 元素的背景颜色更改为红色：<br>$(“p”).css(“background-color”,”red”);</p>
-<h2 id="type选择器"><a href="#type选择器" class="headerlink" title="type选择器"></a>type选择器</h2><p>$(“:file”) 选择所有type等于file的元素</p>
-<h2 id="经典问题"><a href="#经典问题" class="headerlink" title="经典问题"></a>经典问题</h2><p>$(‘div’, $(‘#pick’)) 表示的是获取id为pick的dom里面的所有的div<br>$(“p”).filter(“.intro”)  带有类名 “intro” 的所有p元素<br>$(“p”).eq(1)   选取第二个p元素</p>
-<p>如何获取兄弟元素？<br>$(‘#id’).siblings()   当前元素所有的兄弟节点<br>$(‘#id’).prev()       当前元素前一个兄弟节点<br>$(‘#id’).prevAll()   当前元素之前所有的兄弟节点<br>$(‘#id’).next()       当前元素之后第一个兄弟节点<br>$(‘#id’).nextAll()    当前元素之后所有的兄弟节点</p>
-<p>如何插入元素?<br>$(‘#id’).append()     在被选元素的结尾插入内容<br>$(‘#id’).prepend()     在被选元素的开头插入内容<br>$(‘#id’).after()        在被选元素之后插入内容<br>$(“<span>Hello world!</span>“).insertAfter(“p”);   在p元素后面插入span内容<br>$(‘#id’).before()      在被选元素之前插入内容</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/20/maven-common-usage/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="SpaceX">
-      <meta itemprop="description" content="秀外慧中流砥柱">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SpaceX">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/07/20/maven-common-usage/" class="post-title-link" itemprop="url">maven常用插件技能</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-07-20 09:49:50" itemprop="dateCreated datePublished" datetime="2016-07-20T09:49:50+08:00">2016-07-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="配置文件优先级"><a href="#配置文件优先级" class="headerlink" title="配置文件优先级"></a>配置文件优先级</h2><blockquote>
-<p>pom.xml&gt; user settings &gt; global settings</p>
-</blockquote>
-<h2 id="maven-surefire-plugin"><a href="#maven-surefire-plugin" class="headerlink" title="maven-surefire-plugin"></a>maven-surefire-plugin</h2><p>在我们的maven项目中，一定有一些测试用例报异常的情况，但是这会引起项目build失败，怎么样解决这个问题，<code>maven-surefire-plugin</code>无疑是最佳的选择。<br>下面看一个用例配置：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">  [...]</span><br><span class="line">  <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-surefire-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.20.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">excludes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>**/TestCircle.java<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">exclude</span>&gt;</span>**/TestSquare.java<span class="tag">&lt;/<span class="name">exclude</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">excludes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line">  [...]</span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>我们只需要在项目中的配置文件中配置更改exclude属性即可，支持regex表达式<br>相关链接：<a href="http://maven.apache.org/surefire/maven-surefire-plugin/usage.html" target="_blank" rel="noopener">常用配置</a>|<a href="http://maven.apache.org/surefire/maven-surefire-plugin/examples" target="_blank" rel="noopener">实例</a></p>
-<h2 id="maven-compiler-plugin"><a href="#maven-compiler-plugin" class="headerlink" title="maven-compiler-plugin"></a>maven-compiler-plugin</h2><p>不同的java版本编译器汇会产生不同的效果，例如代码中要是使用上了jdk1.8的新特性，但是maven在编译的时候使用的是jdk1.7的版本，那这一段代码是完全不可能编译成.class文件的。<code>maven-compiler-plugin</code>就是为了处理这一种情况的出现。<br>下面看一个用例配置：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span>&gt;</span></span><br><span class="line">  [...]</span><br><span class="line">  <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    [...]</span><br><span class="line">    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.7.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">verbose</span>&gt;</span>true<span class="tag">&lt;/<span class="name">verbose</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">fork</span>&gt;</span>true<span class="tag">&lt;/<span class="name">fork</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">executable</span>&gt;</span><span class="comment">&lt;!-- path-to-javac --&gt;</span><span class="tag">&lt;/<span class="name">executable</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">compilerVersion</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">compilerVersion</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    [...]</span><br><span class="line">  <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line">  [...]</span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>相关链接：<a href="http://maven.apache.org/surefire/maven-compiler-plugin/usage.html" target="_blank" rel="noopener">常用配置</a>|<a href="http://maven.apache.org/surefire/maven-compiler-plugin/examples" target="_blank" rel="noopener">实例</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1181,7 +1187,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1195,13 +1201,13 @@
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://www.instagram.com/_heart_k/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;_heart_k&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+        <a href="https://www.instagram.com/bili_iish/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;bili_iish&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://gitee.com/Zalldios" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;Zalldios" rel="noopener" target="_blank"><i class="fa fa-fw fa-git"></i>Gitee</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://github.com/ChaojieDZhao" title="Github → https:&#x2F;&#x2F;github.com&#x2F;ChaojieDZhao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>Github</a>
+        <a href="//weibo.com/biliiish" target="_blank" rel="noopener" title="weibo → &#x2F;&#x2F;weibo.com&#x2F;biliiish"><i class="fa fa-fw fa-weibo"></i>weibo</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://space.bilibili.com/12295853" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;12295853" rel="noopener" target="_blank"><i class="fa fa-fw fa-youtube-play"></i>Bilibili</a>
@@ -1231,7 +1237,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

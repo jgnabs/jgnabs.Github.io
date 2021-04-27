@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":true,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"appID":"AL8WZYWIU5","apiKey":"cd3eeb6b327eb1799d492c071a089d71","indexName":"hexo_algolia","hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是JavaJava是一个并发的、基于类的、面向对象的计算机编程语言。优点如下:代码的模块化开发，易于维护和修改。代码的可重用性。提高了代码的可靠性和灵活性。增加对代码的理解。  值得注意的是，Java不是百分百面向对象的，因为8种基本类型不是对象。  面向对象有哪些概念？ 抽象 封装 多态性 继承 预定义类型必须是对象 用户定义的类型必须是对象 操作必须通过向对象发送消息来执行  类和类之间的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java OOP">
+<meta property="og:url" content="http://yoursite.com/2018/06/07/java-oop/index.html">
+<meta property="og:site_name" content="SpaceX">
+<meta property="og:description" content="什么是JavaJava是一个并发的、基于类的、面向对象的计算机编程语言。优点如下:代码的模块化开发，易于维护和修改。代码的可重用性。提高了代码的可靠性和灵活性。增加对代码的理解。  值得注意的是，Java不是百分百面向对象的，因为8种基本类型不是对象。  面向对象有哪些概念？ 抽象 封装 多态性 继承 预定义类型必须是对象 用户定义的类型必须是对象 操作必须通过向对象发送消息来执行  类和类之间的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-06-07T01:07:21.000Z">
+<meta property="article:modified_time" content="2021-03-23T03:04:12.521Z">
+<meta property="article:author" content="SpaceX">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2018/06/07/java-oop/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>java OOP | SpaceX</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SpaceX</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">人生苦短，先学Java</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+      <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+    
+  </div>
+</div>
+
+  </div>
+</div>
+    </header>
+
+    
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/java-oop/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java OOP
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-06-07 09:07:21" itemprop="dateCreated datePublished" datetime="2018-06-07T09:07:21+08:00">2018-06-07</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="什么是Java"><a href="#什么是Java" class="headerlink" title="什么是Java"></a>什么是Java</h2><p>Java是一个并发的、基于类的、面向对象的计算机编程语言。优点如下:<br>代码的模块化开发，易于维护和修改。<br>代码的可重用性。<br>提高了代码的可靠性和灵活性。<br>增加对代码的理解。</p>
+<blockquote>
+<p>值得注意的是，Java不是百分百面向对象的，因为8种基本类型不是对象。</p>
+</blockquote>
+<h2 id="面向对象有哪些概念？"><a href="#面向对象有哪些概念？" class="headerlink" title="面向对象有哪些概念？"></a>面向对象有哪些概念？</h2><ul>
+<li>抽象</li>
+<li>封装</li>
+<li>多态性</li>
+<li>继承</li>
+<li>预定义类型必须是对象</li>
+<li>用户定义的类型必须是对象</li>
+<li>操作必须通过向对象发送消息来执行</li>
+</ul>
+<h2 id="类和类之间的关系，耦合度从高到低"><a href="#类和类之间的关系，耦合度从高到低" class="headerlink" title="类和类之间的关系，耦合度从高到低"></a>类和类之间的关系，耦合度从高到低</h2><p>is - 继承、实现<br>has - 组合、聚合、关联<br>use - 依赖。</p>
+<h3 id="依赖关系-Dependency"><a href="#依赖关系-Dependency" class="headerlink" title="依赖关系(Dependency)"></a>依赖关系(Dependency)</h3><p><strong>单向</strong>，表示一个类依赖于另一个类的定义，其中一个类的变化将影响另外一个类，是一种“use a”关系!如果A依赖于B，则B表现为A的局部变量，方法参数，静态方法调用等</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>&#123;  </span><br><span class="line">        Card card = <span class="keyword">new</span> Card();<span class="comment">//局部变量  </span></span><br><span class="line">        ....  </span><br><span class="line">    &#125; </span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">(Card card)</span></span>&#123;&#125;   <span class="comment">//方法参数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething2</span><span class="params">()</span></span>&#123;  </span><br><span class="line">            <span class="keyword">int</span> id = Card.getId(); <span class="comment">//静态方法调用  </span></span><br><span class="line">            ...  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="关联关系-Association"><a href="#关联关系-Association" class="headerlink" title="关联关系(Association)"></a>关联关系(Association)</h3><p>单向或双向（通常我们需要避免使用双向关联关系），是一种”has a”关系，如果A单向关联B，则可以说A has a B，通常表现为全局变量。</p>
+<blockquote>
+<p>特点是：不是在构造方法中设置的</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Address address;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAddress</span> <span class="params">(Address address)</span></span>&#123;        </span><br><span class="line">        <span class="keyword">this</span>.address= address;  </span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> Address <span class="title">getAddress</span> <span class="params">()</span></span>&#123;          </span><br><span class="line">        <span class="keyword">return</span> address;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>双关联</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">customer</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Product product[]    ;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> customer customer[]    ;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>自关联</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Node current    ;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="聚合关系-Aggregation"><a href="#聚合关系-Aggregation" class="headerlink" title="聚合关系(Aggregation)"></a>聚合关系(Aggregation)</h3><blockquote>
+<p>聚合的特点是：有这个属性，且要在构造方法中使用，但不是在构造方法中创建的。<br>注意和组合的差别：两者的创建时机不同，组合是在Person创建的时候，被创建的。聚合是用<strong>构造参数</strong>创建的。</p>
+</blockquote>
+<p>单向，关联关系的一种，与关联关系之间的区别是<strong>语义上</strong>的，关联的两个对象通常是平等的，聚合则一般不平等，有一种整体和局部的感觉，<br>关联的两个对象之间一般是平等的，例如你是我的朋友，聚合则一般不是平等的，例如一个公司包含了很多员工，其实现上是差不多的。实现上区别不大!</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Team</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">public</span> Person person;  </span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Team</span><span class="params">(Person person)</span></span>&#123;  </span><br><span class="line">        <span class="keyword">this</span>.person = person;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="组合关系-Composition"><a href="#组合关系-Composition" class="headerlink" title="组合关系(Composition)"></a>组合关系(Composition)</h3><p>组合也是关联关系的一种特例，它体现的是一种contains-a的关系，这种关系比聚合更强，也称为强聚合。<br>它同样体现整体与部分间的关系，但此时整体与部分是不可分的，整体的生命周期结束也就意味着部分的生命周期结束，比如人和人的大脑。<br>表现在代码层面，和关联关系是一致的，只能从语义级别来区分。在UML类图设计中，组合关系以实心菱形加实线箭头表示。 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Person和Heart之间是组合</span></span><br><span class="line">    <span class="keyword">private</span> Heart h;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span></span>&#123;</span><br><span class="line">        h=<span class="keyword">new</span> Heart();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>特征是：<strong>要在构造方法中创建对象</strong></p>
+<h2 id="继承关系-Inheritance"><a href="#继承关系-Inheritance" class="headerlink" title="继承关系(Inheritance)"></a>继承关系(Inheritance)</h2><h2 id="实现（Realization）-类实现接口属于这种关系"><a href="#实现（Realization）-类实现接口属于这种关系" class="headerlink" title="实现（Realization） 类实现接口属于这种关系"></a>实现（Realization） 类实现接口属于这种关系</h2><h2 id="泛化（Generalization）-即”is-a”关系，类继承抽象类，类继承父类都属于这种关系"><a href="#泛化（Generalization）-即”is-a”关系，类继承抽象类，类继承父类都属于这种关系" class="headerlink" title="泛化（Generalization） 即”is a”关系，类继承抽象类，类继承父类都属于这种关系"></a>泛化（Generalization） 即”is a”关系，类继承抽象类，类继承父类都属于这种关系</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/07/sql-libai-diff/" rel="prev" title="database数据结构对比">
+      <i class="fa fa-chevron-left"></i> database数据结构对比
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/06/15/java-remote-debug/" rel="next" title="java远程调试">
+      java远程调试 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Java"><span class="nav-number">1.</span> <span class="nav-text">什么是Java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向对象有哪些概念？"><span class="nav-number">2.</span> <span class="nav-text">面向对象有哪些概念？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类和类之间的关系，耦合度从高到低"><span class="nav-number">3.</span> <span class="nav-text">类和类之间的关系，耦合度从高到低</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖关系-Dependency"><span class="nav-number">3.1.</span> <span class="nav-text">依赖关系(Dependency)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关联关系-Association"><span class="nav-number">3.2.</span> <span class="nav-text">关联关系(Association)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合关系-Aggregation"><span class="nav-number">3.3.</span> <span class="nav-text">聚合关系(Aggregation)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合关系-Composition"><span class="nav-number">3.4.</span> <span class="nav-text">组合关系(Composition)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#继承关系-Inheritance"><span class="nav-number">4.</span> <span class="nav-text">继承关系(Inheritance)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现（Realization）-类实现接口属于这种关系"><span class="nav-number">5.</span> <span class="nav-text">实现（Realization） 类实现接口属于这种关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#泛化（Generalization）-即”is-a”关系，类继承抽象类，类继承父类都属于这种关系"><span class="nav-number">6.</span> <span class="nav-text">泛化（Generalization） 即”is a”关系，类继承抽象类，类继承父类都属于这种关系</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="SpaceX"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">SpaceX</p>
+  <div class="site-description" itemprop="description">秀外慧中流砥柱</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://www.instagram.com/bili_iish/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;bili_iish&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://gitee.com/Zalldios" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;Zalldios" rel="noopener" target="_blank"><i class="fa fa-fw fa-git"></i>Gitee</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="//weibo.com/biliiish" target="_blank" rel="noopener" title="weibo → &#x2F;&#x2F;weibo.com&#x2F;biliiish"><i class="fa fa-fw fa-weibo"></i>weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/12295853" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;12295853" rel="noopener" target="_blank"><i class="fa fa-fw fa-youtube-play"></i>Bilibili</a>
+      </span>
+  </div>
+
+
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SpaceX</span>
+</div>
+
+<a href="http://www.beian.miit.gov.cn/"  style="color:#f72b07" target="_blank">豫ICP备16002676号-1</a>
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="//cdn.jsdelivr.net/npm/algoliasearch@4/dist/algoliasearch-lite.umd.js"></script>
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@4/dist/instantsearch.production.min.js"></script>
+<script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

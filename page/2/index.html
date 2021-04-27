@@ -176,6 +176,186 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/31/sql-oralce-install/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/03/31/sql-oralce-install/" class="post-title-link" itemprop="url">oracle安装记录</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-03-31 07:53:37" itemprop="dateCreated datePublished" datetime="2018-03-31T07:53:37+08:00">2018-03-31</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install binutils compat-libstdc++-<span class="number">33</span> elfutils-libelf elfutils-libelf-devel glibc glibc-common glibc-devel gcc gcc-c++ libaio-devel libaio libgcc libstdc++ libstdc++-devel make sysstat unixODBC unixODBC-devel pdksh ksh libaio.i686 glibc.i686 compat-libstdc++-<span class="number">33</span>.i686 libaio-devel.i686 libgcc.i686 libstdc++.i686 unixODBC.i686 unixODBC-devel.i686</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装工具"><a href="#安装工具" class="headerlink" title="安装工具"></a>安装工具</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget unzip <span class="built_in">net</span>-tools </span><br><span class="line">wget http://public-yum.oracle.com/public-yum-ol7.repo -O /etc/yum.repos.d/public-yum-ol7.repo</span><br><span class="line">wget http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol7 -O /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><h3 id="配置环境方法一（使用插件）"><a href="#配置环境方法一（使用插件）" class="headerlink" title="配置环境方法一（使用插件）"></a>配置环境方法一（使用插件）</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install oracle-rdbms-server-<span class="number">11</span>gR2-preinstall</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置环境方法二"><a href="#配置环境方法二" class="headerlink" title="配置环境方法二"></a>配置环境方法二</h3><h4 id="配置用户相关"><a href="#配置用户相关" class="headerlink" title="配置用户相关"></a>配置用户相关</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">groupadd oinstall </span><br><span class="line">groupadd dba </span><br><span class="line">useradd -g oinstall -G dba oracle </span><br><span class="line">passwd oracle</span><br><span class="line">密码：<span class="number">123456</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="添加oracle安全限制"><a href="#添加oracle安全限制" class="headerlink" title="添加oracle安全限制"></a>添加oracle安全限制</h4><blockquote>
+<p>vi /etc/security/limits.conf 末尾添加</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">oracle  soft    nproc  2047 </span><br><span class="line">oracle  hard    nproc  16384 </span><br><span class="line">oracle  soft    nofile  1024 </span><br><span class="line">oracle  hard    nofile  65536 </span><br><span class="line">oracle  soft    stack  10240</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改内核变量配置文件"><a href="#修改内核变量配置文件" class="headerlink" title="修改内核变量配置文件"></a>修改内核变量配置文件</h4><blockquote>
+<p>vi /etc/sysctl.conf 添加</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">fs.aio-max-nr = 1048576 </span><br><span class="line">fs.file-max = 6815744 </span><br><span class="line">kernel.shmall = 2097152 </span><br><span class="line">kernel.shmmax = 1610612736 #共享内存字节数(一般75%物理内存，此变量要根据实际情款修改)  1.5G</span><br><span class="line">kernel.shmmni = 4096 </span><br><span class="line">kernel.sem = 250 32000 100 128 </span><br><span class="line">net.ipv4.ip_local_port_range = 9000 65500 </span><br><span class="line">net.core.rmem_default = 262144 </span><br><span class="line">net.core.rmem_max = 4194304 </span><br><span class="line">net.core.wmem_default = 262144 </span><br><span class="line">net.core.wmem_max = 1048586 </span><br><span class="line">查看添加是够成功：sysctl -p</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><blockquote>
+<p>vim .bash_profile </p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">export ORACLE_BASE=/usr/local/u01/oracle</span><br><span class="line">export ORACLE_HOME=/usr/local/u01/oracle/product/11.2.0/dbhome_1</span><br><span class="line">export ORACLE_SID=shibdz </span><br><span class="line">export NLS_LANG="american_america.ZHS16GBK"</span><br><span class="line">export NLS_DATE_FORMAT="YYYY-MM-DD HH24:Mi:SS"</span><br><span class="line">export LD_LIBRARY_PATH=$ORACLE_HOME/lib</span><br><span class="line">export PATH=$ORACLE_HOME/bin:$PATH </span><br><span class="line">PATH=$PATH:$HOME/bin</span><br><span class="line">export PATH</span><br></pre></td></tr></table></figure>
+<h2 id="创建文件夹-赋予权限"><a href="#创建文件夹-赋予权限" class="headerlink" title="创建文件夹 赋予权限"></a>创建文件夹 赋予权限</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">su root</span><br><span class="line"><span class="built_in">mkdir</span> -p /usr/local/u01/oracle &amp;&amp; chown -R oracle:oinstall /usr/local/u01/oracle</span><br><span class="line"><span class="built_in">mkdir</span> -p /usr/local/u01/oraInventory &amp;&amp; chown -R oracle:oinstall /usr/local/u01/oraInventory</span><br></pre></td></tr></table></figure>
+
+<h2 id="解压文件并且赋予权限"><a href="#解压文件并且赋予权限" class="headerlink" title="解压文件并且赋予权限"></a>解压文件并且赋予权限</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unzip linux.x64_11gR2_database_1of2.zip &amp;&amp; unzip linux.x64_11gR2_database_2of2.zip </span><br><span class="line">chown -R oracle:oinstall /home/oracle/database</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置db-install-rsp"><a href="#配置db-install-rsp" class="headerlink" title="配置db_install.rsp"></a>配置db_install.rsp</h2><blockquote>
+<p>cp -r /home/oracle/database/response /home/oracle/rsp 备份</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#我的/home/oracle/rsp/db_install.rsp</span><br><span class="line">oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v11_2_0</span><br><span class="line">#INSTALL_DB_AND_CONFIG安装并自动配置数据库实例和监听 建议首次安装用这个</span><br><span class="line">#不然配置另外两个文件，新建实例和监听</span><br><span class="line">oracle.install.option=INSTALL_DB_AND_CONFIG</span><br><span class="line">ORACLE_HOSTNAME=localhost</span><br><span class="line">UNIX_GROUP_NAME=oinstall</span><br><span class="line">INVENTORY_LOCATION=/usr/local/u01/oraInventory</span><br><span class="line">SELECTED_LANGUAGES=zh_CN,en</span><br><span class="line">ORACLE_HOME=/usr/local/u01/oracle/product/11.2.0/dbhome_1</span><br><span class="line">ORACLE_BASE=/usr/local/u01/oracle</span><br><span class="line">oracle.install.db.InstallEdition=EE</span><br><span class="line">oracle.install.db.isCustomInstall=true</span><br><span class="line">oracle.install.db.customComponents=oracle.server:11.2.0.1.0,oracle.sysman.ccr:10.2.7.0.0,oracle.xdk:11.2.0.1.0,oracle.rdbms.oci:11.2.0.1.0,oracle.network:11.2.0.1.0,oracle.network.listener:11.2.0.1.0,oracle.rdbms:11.2.0.1.0,oracle.options:11.2.0.1.0,oracle.rdbms.partitioning:11.2.0.1.0,oracle.oraolap:11.2.0.1.0,oracle.rdbms.dm:11.2.0.1.0,oracle.rdbms.dv:11.2.0.1.0,orcle.rdbms.lbac:11.2.0.1.0,oracle.rdbms.rat:11.2.0.1.0</span><br><span class="line">oracle.install.db.DBA_GROUP=dba</span><br><span class="line">oracle.install.db.OPER_GROUP=oinstall</span><br><span class="line">oracle.install.db.config.starterdb.type=GENERAL_PURPOSE</span><br><span class="line">#这个是服务名</span><br><span class="line">oracle.install.db.config.starterdb.globalDBName=shibdz_ypt</span><br><span class="line">#实例sid</span><br><span class="line">oracle.install.db.config.starterdb.SID=shibdz</span><br><span class="line">oracle.install.db.config.starterdb.characterSet=AL32UTF8</span><br><span class="line">oracle.install.db.config.starterdb.memoryOption=true</span><br><span class="line">oracle.install.db.config.starterdb.memoryLimit=1024</span><br><span class="line">#是否安装学习的scott和hr(我就知道这两个)</span><br><span class="line">oracle.install.db.config.starterdb.installExampleSchemas=true</span><br><span class="line">oracle.install.db.config.starterdb.enableSecuritySettings=true</span><br><span class="line">#密码全设置成123456 (安装时会提示，个人学习忽略)</span><br><span class="line">oracle.install.db.config.starterdb.password.ALL=123456</span><br><span class="line">oracle.install.db.config.starterdb.control=DB_CONTROL</span><br><span class="line">oracle.install.db.config.starterdb.dbcontrol.enableEmailNotification=false</span><br><span class="line">oracle.install.db.config.starterdb.automatedBackup.enable=false</span><br><span class="line">oracle.install.db.config.starterdb.storageType=FILE_SYSTEM_STORAGE</span><br><span class="line">oracle.install.db.config.starterdb.fileSystemStorage.dataLocation=/usr/local/u01/oracle/oradata</span><br><span class="line">#true</span><br><span class="line">DECLINE_SECURITY_UPDATES=true</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/oracle/database/runInstaller -silent -ignorePrereq  -responseFile /home/oracle/rsp/db_install.rsp</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决-INS-35173"><a href="#解决-INS-35173" class="headerlink" title="解决 INS-35173"></a>解决 INS-35173</h3><blockquote>
+<p>修改/etc/fstab  添加如下一行</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tmpfs            &#x2F;dev&#x2F;shm       tmpfs  defaults,size&#x3D;3G       0 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dbstart $ORACLE_HOME</span><br><span class="line">dbshut  $ORACLE_HOME</span><br><span class="line">lsnrctl stop、lsnrctl <span class="built_in">start</span>、lsnrctl status</span><br><span class="line">连接数据库：sqlplus / as sysdba </span><br><span class="line">shutdown immediate</span><br><span class="line">startup</span><br></pre></td></tr></table></figure>
+<h3 id="监听服务配置文件展示"><a href="#监听服务配置文件展示" class="headerlink" title="监听服务配置文件展示"></a>监听服务配置文件展示</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"># tnsnames.ora Network Configuration File: /usr/local/u01/oracle/product/<span class="number">11</span>.<span class="number">2</span>.<span class="number">0</span>/dbhome_1/network/admin/tnsnames.ora</span><br><span class="line"># Generated by Oracle configuration tools.</span><br><span class="line"></span><br><span class="line">SHIBDZ_YPT =</span><br><span class="line">  (DESCRIPTION =</span><br><span class="line">    (ADDRESS = (PROTOCOL = TCP)(HOST = <span class="number">10</span>.<span class="number">9</span>.<span class="number">4</span>.<span class="number">192</span>)(PORT = <span class="number">1521</span>))</span><br><span class="line">    (CONNECT_DATA =</span><br><span class="line">      (SERVER = DEDICATED)</span><br><span class="line">      (SERVICE_NAME = shibdz_ypt)</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># listener.ora Network Configuration File: /usr/local/u01/oracle/product/<span class="number">11</span>.<span class="number">2</span>.<span class="number">0</span>/dbhome_1/network/admin/listener.ora</span><br><span class="line"># Generated by Oracle configuration tools.</span><br><span class="line">SID_LIST_LISTENER =</span><br><span class="line">  (SID_LIST =</span><br><span class="line">    (SID_DESC =</span><br><span class="line">      (GLOBAL_DBNAME = shibdz_ypt)</span><br><span class="line">      (ORACLE_HOME = /usr/local/u01/oracle/product/<span class="number">11</span>.<span class="number">2</span>.<span class="number">0</span>/dbhome_1)</span><br><span class="line">	  (SID_NAME = shibdz)</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">LISTENER =</span><br><span class="line">  (DESCRIPTION_LIST =</span><br><span class="line">    (DESCRIPTION =</span><br><span class="line">      (ADDRESS = (PROTOCOL = IPC)(KEY = EXTPROC1521))</span><br><span class="line">      (ADDRESS = (PROTOCOL = TCP)(HOST = <span class="number">10</span>.<span class="number">9</span>.<span class="number">4</span>.<span class="number">192</span>)(PORT = <span class="number">1521</span>))</span><br><span class="line">    )</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line">ADR_BASE_LISTENER = /usr/local/u01/oracle</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/java-jvm-threaddump/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="SpaceX">
+      <meta itemprop="description" content="秀外慧中流砥柱">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SpaceX">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/01/16/java-jvm-threaddump/" class="post-title-link" itemprop="url">服务器隐忧排查</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-16 14:17:53" itemprop="dateCreated datePublished" datetime="2018-01-16T14:17:53+08:00">2018-01-16</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="linux"><a href="#linux" class="headerlink" title="linux"></a>linux</h1><h2 id="查询耗费进程的pid"><a href="#查询耗费进程的pid" class="headerlink" title="查询耗费进程的pid"></a>查询耗费进程的pid</h2><p>top -H</p>
+<h2 id="查询该进程的线程占用情况"><a href="#查询该进程的线程占用情况" class="headerlink" title="查询该进程的线程占用情况"></a>查询该进程的线程占用情况</h2><p>top -H -p $pid<br>或者top -p $pid,shift + h 线程按照CPU排序。</p>
+<h2 id="查询线程状态信息"><a href="#查询线程状态信息" class="headerlink" title="查询线程状态信息"></a>查询线程状态信息</h2><p>jstack $pid |grep $tid(需要转换为十六进制) -A 30</p>
+<h2 id="jstack命令记录"><a href="#jstack命令记录" class="headerlink" title="jstack命令记录"></a>jstack命令记录</h2><p>jstack -l $pid<br>jstack -l -m $pid #to print both java and native frames (mixed mode)，打印java和本地帧。如果调用动态库的话 一定要带上该参数。</p>
+<h3 id="ThreadDump文件"><a href="#ThreadDump文件" class="headerlink" title="ThreadDump文件"></a>ThreadDump文件</h3><p>jstack -l $pid | tee -a $file-path</p>
+<h2 id="直接转换十六进制"><a href="#直接转换十六进制" class="headerlink" title="直接转换十六进制"></a>直接转换十六进制</h2><p>echo ‘obase=16; $pid’ | bc 或者  printf “%x\n” $pid</p>
+<h2 id="显示内存模型信息"><a href="#显示内存模型信息" class="headerlink" title="显示内存模型信息"></a>显示内存模型信息</h2><p>jmap -histo:live $pid | head -n 100</p>
+<h2 id="统计打印出来的Thread-Info"><a href="#统计打印出来的Thread-Info" class="headerlink" title="统计打印出来的Thread_Info"></a>统计打印出来的Thread_Info</h2><p>grep java.lang.Thread.State abnormalThreadInfo.txt | awk ‘{print $2$3$4$5}’ | sort | uniq -c</p>
+<h1 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h1><h2 id="查看当前Java的进程信息"><a href="#查看当前Java的进程信息" class="headerlink" title="查看当前Java的进程信息"></a>查看当前Java的进程信息</h2><p>jps -l</p>
+<h2 id="查看当前存活的对象"><a href="#查看当前存活的对象" class="headerlink" title="查看当前存活的对象"></a>查看当前存活的对象</h2><p>jmap -histo:live $pid</p>
+<h2 id="打印当前的堆信息"><a href="#打印当前的堆信息" class="headerlink" title="打印当前的堆信息"></a>打印当前的堆信息</h2><p>jmap –heap $pid</p>
+<h1 id="jstat命令指南"><a href="#jstat命令指南" class="headerlink" title="jstat命令指南"></a>jstat命令指南</h1><h2 id="类加载统计"><a href="#类加载统计" class="headerlink" title="类加载统计"></a>类加载统计</h2><p>jstat -class $pid   </p>
+<blockquote>
+<p>Loaded:加载class的数量<br>Bytes：所占用空间大小<br>Unloaded：未加载数量<br>Bytes:未加载占用空间<br>Time：时间 </p>
+</blockquote>
+<h2 id="类编译统计"><a href="#类编译统计" class="headerlink" title="类编译统计"></a>类编译统计</h2><p>jstat -compiler 6988  </p>
+<blockquote>
+<p>Compiled：编译数量。<br>Failed：失败数量<br>Invalid：不可用数量<br>Time：时间<br>FailedType：失败类型<br>FailedMethod：失败的方法 </p>
+</blockquote>
+<h2 id="总结统计"><a href="#总结统计" class="headerlink" title="总结统计"></a>总结统计</h2><p>jstat -gcutil $pid<br><a href="https://www.cnblogs.com/yjd_hycf_space/p/7755633.html" target="_blank" rel="noopener">jvm-各分区定义</a></p>
+<h1 id="jinfo命令指南"><a href="#jinfo命令指南" class="headerlink" title="jinfo命令指南"></a>jinfo命令指南</h1><h2 id="查看某进程的参数信息"><a href="#查看某进程的参数信息" class="headerlink" title="查看某进程的参数信息"></a>查看某进程的参数信息</h2><p>jinfo -flags $pid</p>
+<h2 id="筛选某进程的某一参数信息"><a href="#筛选某进程的某一参数信息" class="headerlink" title="筛选某进程的某一参数信息"></a>筛选某进程的某一参数信息</h2><p>jinfo -flag MaxHeapSize $pid    #此参数已经在JAVA8中过期了，转换为了metaspace。</p>
+<blockquote>
+<p>jinfo还可以直接更改参数的值，使用在生产情况。</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/25/python-grammar-notes/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -782,7 +962,7 @@ __builtins__: 内置模块空间，也就是内置变量或者内置函数的名
 <h3 id="2、newFixedThreadPool"><a href="#2、newFixedThreadPool" class="headerlink" title="2、newFixedThreadPool"></a>2、newFixedThreadPool</h3><p>创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">                                      <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                      <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="3、newScheduledThreadPool"><a href="#3、newScheduledThreadPool" class="headerlink" title="3、newScheduledThreadPool"></a>3、newScheduledThreadPool</h3><p>创建一个定长线程池，支持定时及周期性任务执行。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newScheduledThreadPool</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ScheduledThreadPoolExecutor(corePoolSize);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">              <span class="keyword">new</span> DelayedWorkQueue())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">             Executors.defaultThreadFactory(), defaultHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newScheduledThreadPool</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ScheduledThreadPoolExecutor(corePoolSize);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="number">0</span>, NANOSECONDS,</span><br><span class="line">              <span class="keyword">new</span> DelayedWorkQueue())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,</span><br><span class="line">             Executors.defaultThreadFactory(), defaultHandler);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> ScheduledFuture&lt;?&gt; schedule(Runnable command,</span><br><span class="line">                       <span class="keyword">long</span> delay, TimeUnit unit);</span><br><span class="line"></span><br><span class="line">command：执行的任务 Callable或Runnable接口实现类</span><br><span class="line">delay：延时执行任务的时间</span><br><span class="line">unit：延迟时间单位</span><br></pre></td></tr></table></figure>
 <h3 id="4、newSingleThreadExecutor"><a href="#4、newSingleThreadExecutor" class="headerlink" title="4、newSingleThreadExecutor"></a>4、newSingleThreadExecutor</h3><p>创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">            (<span class="keyword">new</span> ThreadPoolExecutor(<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">                                    <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                    <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="ThreadPoolExecutor的构造方法参数"><a href="#ThreadPoolExecutor的构造方法参数" class="headerlink" title="ThreadPoolExecutor的构造方法参数"></a>ThreadPoolExecutor的构造方法参数</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">int</span> maximumPoolSize,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">long</span> keepAliveTime,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              TimeUnit unit,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              BlockingQueue&lt;Runnable&gt; workQueue,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              ThreadFactory threadFactory,    </span></span></span><br><span class="line"><span class="function"><span class="params">                              RejectedExecutionHandler handler)</span></span></span><br></pre></td></tr></table></figure>
@@ -794,12 +974,12 @@ __builtins__: 内置模块空间，也就是内置变量或者内置函数的名
 <li>4 unit 时间单位  </li>
 <li>5 workQueue 任务队列<br>用于保存等待执行的任务的阻塞队列。一个阻塞队列，用来存储等待执行的任务</li>
 <li>6 threadFactory 用于设置创建线程的工厂<br>可以通过线程工厂给每个创建出来的线程设置更有意义的名字</li>
-<li>7 handler 饱和策略（四种ThreadPoolExcutor的饱和策略）<br>ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。<br>ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。<br>ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）<br>ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务</li>
+<li>7 handler 饱和策略（四种ThreadPoolExcutor的饱和策略）<br>ThreadPoolExecutor.AbortPolicy:丢弃任务并抛出RejectedExecutionException异常。<br>ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。<br>ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）<br>ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务<br>当然也可以实现自己的饱和策略</li>
 </ul>
 <h3 id="处理流程"><a href="#处理流程" class="headerlink" title="处理流程"></a>处理流程</h3><p>当提交一个任务到线程池时它的执行流程是怎样的呢？</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNbRwgy1fnbzmai8yrj30dw08574s.jpg" alt=""></p>
 <blockquote>
-<p>首先第一步会判断核心线程数有没有达到上限，如果没有则创建线程(会获取全局锁)，满了则会将任务丢进阻塞队列。<br>如果队列也满了则需要判断最大线程数是否达到上限，如果没有则创建线程(获取全局锁)，如果最大线程数也满了则会根据饱和策略处理。<br>常用的饱和策略有:  </p>
+<p>首先第一步会判断核心线程数有没有达到上限，如果没有则创建线程(会获取全局锁)，满了则会将任务丢进阻塞队列。<br>如果<strong>队列也满了则需要判断最大线程数是否达到上限</strong>，如果没有则创建线程(获取全局锁)，如果最大线程数也满了则会根据饱和策略处理。<br>常用的饱和策略有:  </p>
 </blockquote>
 <ul>
 <li>直接丢弃任务。     </li>
@@ -961,142 +1141,6 @@ __builtins__: 内置模块空间，也就是内置变量或者内置函数的名
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/20/sql-oracle-materialized-view/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="SpaceX">
-      <meta itemprop="description" content="秀外慧中流砥柱">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SpaceX">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/11/20/sql-oracle-materialized-view/" class="post-title-link" itemprop="url">oracle物化视图的使用</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-11-20 09:09:38" itemprop="dateCreated datePublished" datetime="2016-11-20T09:09:38+08:00">2016-11-20</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h3 id="物化视图的类型："><a href="#物化视图的类型：" class="headerlink" title="物化视图的类型："></a>物化视图的类型：</h3><p>on demand、on commit 二者的区别在于刷新方法的不同<br>on demand顾名思义，仅在该物化视图“需要”被刷新了，才进行刷新(refresh)，即更新物化视图，以保证和基表数据的一致性；<br>而on commit是说，一旦基表有了commit，即事务提交，则立刻刷新，立刻更新物化视图，使得数据和基表一致。</p>
-<h3 id="on-demand物化视图"><a href="#on-demand物化视图" class="headerlink" title="on demand物化视图"></a>on demand物化视图</h3><p>物化视图的创建本身是很复杂和需要优化参数设置的，特别是针对大型生产数据库系统而言。<br>但oracle允许以这种最简单的，类似于普通视图的方式来做，所以不可避免的会涉及到默认值问题。<br>也就是说oracle给物化视图的重要定义参数的默认值处理是我们需要特别注意的。</p>
-<p>物化视图的特点：<br>(1) 物化视图在某种意义上说就是一个物理表(而且不仅仅是一个物理表)，这通过其可以被user_tables查询出来，而得到佐证；<br>(2) 物化视图也是一种段(segment)，所以其有自己的物理存储属性；<br>(3) 物化视图会占用数据库磁盘空间，这点从user_segment的查询结果，可以得到佐证；<br>创建语句：create materialized view mv_name as select * from table_name<br>默认情况下，如果没指定刷新方法和刷新模式，则oracle默认为force和demand。</p>
-<h3 id="on-commit物化视图"><a href="#on-commit物化视图" class="headerlink" title="on commit物化视图"></a>on commit物化视图</h3><p>on commit物化视图的创建，和上面创建on demand的物化视图区别不大。因为on demand是默认的，所以on commit物化视图，需要再增加个参数即可。<br>需要注意的是，无法在定义时仅指定on commit，还得附带个参数才行。<br>创建on commit物化视图：create materialized view mv_name refresh force on commit as select * from table_name  </p>
-<h3 id="物化视图的刷新"><a href="#物化视图的刷新" class="headerlink" title="物化视图的刷新"></a>物化视图的刷新</h3><p>刷新（refresh）：指当基表发生了dml操作后，物化视图何时采用哪种方式和基表进行同步。<br>刷新的模式有两种：on demand和on commit。（如上所述）<br>刷新的方法有四种：fast、complete、force和never。<br>fast刷新采用增量刷新，只刷新自上次刷新以后进行的修改。<br>complete刷新对整个物化视图进行完全的刷新。<br>如果选择force方式，则oracle在刷新时会去判断是否可以进行快速刷新，如果可以则采用fast方式，否则采用complete的方式。<br>never指物化视图不进行任何刷新。<br>对于已经创建好的物化视图，可以修改其刷新方式，比如把物化视图mv_name的刷新方式修改为每天晚上10点刷新一次：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">materialized</span> <span class="keyword">view</span> mv_name <span class="keyword">refresh</span> <span class="keyword">force</span> <span class="keyword">on</span> <span class="keyword">demand</span> <span class="keyword">start</span> <span class="keyword">with</span> <span class="keyword">sysdate</span> <span class="keyword">next</span> <span class="keyword">to_date</span>(<span class="keyword">concat</span>(to_char(<span class="keyword">sysdate</span>+<span class="number">1</span>,<span class="string">'dd-mm-yyyy'</span>),<span class="string">' 22:00:00'</span>),<span class="string">'dd-mm-yyyy hh24:mi:ss'</span>)</span><br><span class="line">-或者job使用存储过程当时刷新，两者相差无几。先创建存储过程</span><br><span class="line"><span class="keyword">create</span> <span class="keyword">or</span> <span class="keyword">replace</span> <span class="keyword">procedure</span> p_refresh_stats <span class="keyword">is</span></span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  dbms_mview.refresh(<span class="string">'mv_name'</span>, <span class="string">'c'</span>);</span><br><span class="line"><span class="keyword">end</span> p_refresh_stats;</span><br><span class="line">-然后创建job执行该存储过程</span><br><span class="line"><span class="keyword">begin</span></span><br><span class="line">  sys.dbms_scheduler.create_job(job_name            =&gt; <span class="string">'bjd_branch.job_refresh_stats'</span>,</span><br><span class="line">                                job_type            =&gt; <span class="string">'stored_procedure'</span>,</span><br><span class="line">                                job_action          =&gt; <span class="string">'p_refresh_stats'</span>,</span><br><span class="line">                                start_date          =&gt; <span class="keyword">to_date</span>(<span class="string">'01-07-2016 00:00:00'</span>, <span class="string">'dd-mm-yyyy hh24:mi:ss'</span>),</span><br><span class="line">                                repeat_interval     =&gt; <span class="string">'freq=hourly;interval=1'</span>,</span><br><span class="line">                                end_date            =&gt; <span class="keyword">to_date</span>(<span class="string">'01-07-2022 00:00:00'</span>, <span class="string">'dd-mm-yyyy hh24:mi:ss'</span>),</span><br><span class="line">                                job_class           =&gt; <span class="string">'default_job_class'</span>,</span><br><span class="line">                                enabled             =&gt; <span class="literal">true</span>,</span><br><span class="line">                                auto_drop           =&gt; <span class="literal">false</span>,</span><br><span class="line">                                comments            =&gt; <span class="string">''</span>);</span><br><span class="line"><span class="keyword">end</span>;</span><br></pre></td></tr></table></figure>
-
-<h3 id="物化视图具有表一样的特征"><a href="#物化视图具有表一样的特征" class="headerlink" title="物化视图具有表一样的特征"></a>物化视图具有表一样的特征</h3><p>所以可以像对表一样，我们可以为它创建索引，创建方法和对表一样。</p>
-<h3 id="物化视图的删除"><a href="#物化视图的删除" class="headerlink" title="物化视图的删除"></a>物化视图的删除</h3><p>虽然物化视图是和表一起管理的，但是在经常使用的oplsql工具中，并不能用删除表的方式来删除<br>（在表上右键选择‘drop’并不能删除物化视图），可以使用语句来实现：drop materialized view mv_name</p>
-<h3 id="普通视图和物化视图的区别"><a href="#普通视图和物化视图的区别" class="headerlink" title="普通视图和物化视图的区别"></a>普通视图和物化视图的区别</h3><p>普通视图和物化视图根本就不是一个东西，说区别都是硬拼到一起的，<br>首先明白基本概念，普通视图是不存储任何数据的，他只有定义，在查询中是转换为对应的定义sql去查询，<br>而物化视图是将数据转换为一个表，实际存储着数据，这样查询数据，就不用关联一大堆表，如果表很大的话，会在临时表空间内做大量的操作。</p>
-<p>普通视图的三个特征：<br>1、是简化设计，清晰编码的东西，他并不是提高性能的，他的存在只会降低性能<br>（如一个视图7个表关联，另一个视图8个表，程序员不知道，觉得很方便，把两个视图关联再做一个视图，那就惨了），他的存在未了在设计上的方便性</p>
-<p>2、其次，是安全，在授权给其他用户或者查看角度，多个表关联只允许查看，不允许修改，<br>单表也可以同with read only来控制，当然有些项目基于视图做面向对象的开发，即在视图上去做instand of触发器，就我个人而言是不站同的，虽然开发上方便，但是未必是好事。</p>
-<p>3、从不同的角度看不同的维度，视图可以划分维度和权限，并使多个维度的综合，也就是你要什么就可以从不同的角度看，而表是一个实体的而已，<br>一般维度较少（如：人员表和身份表关联，从人员表可以查看人员的维度统计，从身份看，可以看不同种类的身份有那些人或者多少人），<br>其次另一个如系统视图user_table、tab、user_objects这些视图，不同的用户下看到的肯定是不一样的，看的是自己的东西。<br>物化视图呢，用于olap系统中，当然部分oltp系统的小部分功能未了提高性能会借鉴一点点，因为表关联的开销很大，所以在开发中很多人就像把这个代价交给定期转存来完成，<br>oracle当然也提供了这个功能，就是将视图（或者一个大sql）的信息转换为物理数据存储，然后提供不同的策略：<br>定时刷还是及时刷、增量刷还是全局刷等等可以根据实际情况进行选择，总之你差的是表，不是视图。</p>
-<p>关于在刷新和索引上的区别<br>他们两个没有联系吧，刷新我不清楚你是否指的是物化视图的刷新，因为刷新的概念很泛，你说到这里我就理解为物化视图的刷新了，<br>上面也已经说了，这是一种策略和方法，其实它是通过对视图关联表上创建相应的log，根据日志信息的sql同步到物化视图中的，<br>一般来说：定时的一般是全局刷，及时的一般是局部刷。</p>
-<p>而索引这个说起来就多了，可以说索引专门是一门课程，大概点来说，索引一般有普通索引、位图索引、唯一性索引（还有全文索引啥的，一般不用），<br>其实仔细研究会发现无论是那一种索引都是b+树为基础，并起存放方式和表一样，是以段为单位，只是内部有树关系而已。</p>
-<p>1、普通索引是根据b+树找到第一个（索引时有序的），然后以当前为基准，向后顺序找到不符合条件的健值为止。<br>2、位图是在叶子节点上根据位图种类对叶子节点的值进行01编码存放（如该字段有1、2、3三种值，就会在叶子节点上有三个位图，<br>每个位图根据健值和rowid顺序存放是否为1、是否为2、是否为3，所以在rbo下统计很快，cbo下一般会认为是普通索引）。</p>
-<p>3、也是按照b+树找，只是找到就不再做任何操作，因为是唯一的。<br>因为b+查找是一个类似表的查询，而且获取到rowid后还是要回表查询的，所以这个过程的开销要和全表扫描计算那个结果更加快，oracle才会选择是走索引还是走全表扫描，<br>当然对于cbo和rbo选择的方式不一样，具体又是很多，cbo要依赖于表的统计信息，rbo是依赖于尝试。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/28/linux-cmd-tee/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="SpaceX">
-      <meta itemprop="description" content="秀外慧中流砥柱">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SpaceX">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2016/09/28/linux-cmd-tee/" class="post-title-link" itemprop="url">tee命令使用</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2016-09-28 17:22:24" itemprop="dateCreated datePublished" datetime="2016-09-28T17:22:24+08:00">2016-09-28</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>tee命令用于将数据重定向到文件，另一方面还可以提供一份重定向数据的副本作为后续命令的stdin。简单的说就是把数据重定向到给定文件和屏幕上。</p>
-<p>列如 <code>ls -l |tee file.txt|cat</code></p>
-<p>tee和echo类似，可以把打印内容输入到一个文件，常和<code>&lt;&lt;</code>使用<br><code>&lt;&lt;</code>字符表示从命令行读取输入，直到一个与&lt;&lt; 所跟内容相同的字符结束</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@alldios~]#tee /etc/yum.repos.d/docker.repo &lt;&lt;-'EOF'  #创建一个文件，内容就是下面命令行EOF之前的输入。</span><br><span class="line">[dockerrepo]</span><br><span class="line">name=Docker Repository</span><br><span class="line">baseurl=https://yum.dockerproject.org/repo/main/centos/7/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">gpgkey=https://yum.dockerproject.org/gpg</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1169,7 +1213,7 @@ __builtins__: 内置模块空间，也就是内置变量或者内置函数的名
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1183,13 +1227,13 @@ __builtins__: 内置模块空间，也就是内置变量或者内置函数的名
 </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://www.instagram.com/_heart_k/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;_heart_k&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
+        <a href="https://www.instagram.com/bili_iish/" title="Instagram → https:&#x2F;&#x2F;www.instagram.com&#x2F;bili_iish&#x2F;" rel="noopener" target="_blank"><i class="fa fa-fw fa-instagram"></i>Instagram</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://gitee.com/Zalldios" title="Gitee → https:&#x2F;&#x2F;gitee.com&#x2F;Zalldios" rel="noopener" target="_blank"><i class="fa fa-fw fa-git"></i>Gitee</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://github.com/ChaojieDZhao" title="Github → https:&#x2F;&#x2F;github.com&#x2F;ChaojieDZhao" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>Github</a>
+        <a href="//weibo.com/biliiish" target="_blank" rel="noopener" title="weibo → &#x2F;&#x2F;weibo.com&#x2F;biliiish"><i class="fa fa-fw fa-weibo"></i>weibo</a>
       </span>
       <span class="links-of-author-item">
         <a href="https://space.bilibili.com/12295853" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;12295853" rel="noopener" target="_blank"><i class="fa fa-fw fa-youtube-play"></i>Bilibili</a>
@@ -1219,7 +1263,7 @@ __builtins__: 内置模块空间，也就是内置变量或者内置函数的名
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
